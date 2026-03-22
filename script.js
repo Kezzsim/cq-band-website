@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const maxHorizontalMove = window.innerWidth * 0.55; // 70% / 2 = 35% in each direction
         const horizontalOffset = Math.max(-maxHorizontalMove, Math.min(maxHorizontalMove, totalScrollDistance * 0.5));
         
-        // Apply horizontal movement to middleground while keeping it vertically centered
-        middlegroundImage.style.transform = `translate(calc(-50% + ${horizontalOffset}px), -50%)`;
+        // Apply both horizontal and vertical movement to middleground to sync with background layers
+        middlegroundImage.style.transform = `translate(calc(-50% + ${horizontalOffset}px), calc(-50% + ${verticalOffset}px))`;
         
         ticking = false;
     }

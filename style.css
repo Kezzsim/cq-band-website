@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+/* Mobile layout adjustment variable */
+:root {
+    --mobile-left-offset: 61%; /* Adjustable margin for left-justified layout on mobile */
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -167,6 +172,19 @@ footer p {
 
 /* Responsive design */
 @media (max-width: 768px) {
+    /* Shift background layers left for left-justified appearance */
+    .background-image {
+        background-position: var(--mobile-left-offset) center;
+    }
+    
+    .foreground-image {
+        background-position: var(--mobile-left-offset) center;
+    }
+    
+    .middleground-image {
+        left: calc(var(--mobile-left-offset) - 15%);
+    }
+    
     header h1 {
         font-size: 2rem;
     }
