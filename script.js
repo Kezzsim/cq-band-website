@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const maxHorizontalMove = window.innerWidth * 0.55;
         
         // Set travel multiplier based on screen size
-        const travelMultiplier = window.innerWidth <= 768 ? 0.4 : 0.7;
+        const travelMultiplier = window.innerWidth <= 768 ? 0.3 : 0.7;
 
         const horizontalOffset = Math.max(-maxHorizontalMove, Math.min(maxHorizontalMove, totalScrollDistance * travelMultiplier));
         
