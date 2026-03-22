@@ -209,6 +209,43 @@ footer p {
     color: orange;
     font-family: "Jolly Lodger", serif;
     font-size: 38px;
+    margin-bottom: 20px;
+}
+
+/* Social links styling */
+.social-links {
+    margin-top: 20px;
+}
+
+.instagram-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #E4405F;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+.instagram-link:hover {
+    color: #C13584;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.instagram-icon {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.instagram-link:hover .instagram-icon {
+    transform: scale(1.1);
 }
 
 .jolly-lodger-regular {
@@ -256,4 +293,7 @@ footer p {
     .content-block {
         padding: 40px 20px;
     }
+    
+    /* Mobile footer adjustments */
+    footer p {\n        font-size: 28px;\n    }\n    \n    .instagram-link {\n        font-size: 14px;\n        padding: 8px 12px;\n    }\n    \n    .instagram-icon {\n        width: 20px;\n        height: 20px;\n    }
 }
