@@ -1,17 +1,30 @@
 // Background scroll effect
 document.addEventListener('DOMContentLoaded', function() {
     const backgroundImage = document.getElementById('backgroundImage');
+    const foregroundImage = document.getElementById('foregroundImage');
+    const middlegroundImage = document.getElementById('middlegroundImage');
     let ticking = false;
+    let totalScrollDistance = 0;
 
     function updateBackgroundPosition() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
-        // Calculate the offset: scroll distance * 20% (0.2)
-        const offset = scrollTop * -0.2;
+        // Calculate the vertical offset: scroll distance * 20% (0.2)
+        const verticalOffset = scrollTop * -0.2;
         
-        // Apply the transform with the vertical offset
-        // The background starts at the top (0) and moves down by the offset
-        backgroundImage.style.transform = `translateY(${offset}px)`;
+        // Apply the same vertical transform to background and foreground layers
+        const verticalTransform = `translateY(${verticalOffset}px)`;
+        backgroundImage.style.transform = verticalTransform;
+        foregroundImage.style.transform = verticalTransform;
+        
+        // Calculate horizontal movement for middleground (up to 70% of screen width)
+        // Use total accumulated scroll for smoother horizontal movement
+        totalScrollDistance += (scrollTop - (totalScrollDistance / 1.1)) * 0.1; // Smooth accumulation
+        const maxHorizontalMove = window.innerWidth * 0.55; // 70% / 2 = 35% in each direction
+        const horizontalOffset = Math.max(-maxHorizontalMove, Math.min(maxHorizontalMove, totalScrollDistance * 0.5));
+        
+        // Apply horizontal movement to middleground while keeping it vertically centered
+        middlegroundImage.style.transform = `translate(calc(-50% + ${horizontalOffset}px), -50%)`;
         
         ticking = false;
     }
@@ -28,14 +41,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle touch events for better mobile experience
     let touchStartY = 0;
-    let touchEndY = 0;
+    let lastTouchY = 0;
+    let touchVelocity = 0;
 
     document.addEventListener('touchstart', function(e) {
         touchStartY = e.changedTouches[0].screenY;
+        lastTouchY = touchStartY;
     }, { passive: true });
 
     document.addEventListener('touchmove', function(e) {
-        touchEndY = e.changedTouches[0].screenY;
+        const currentTouchY = e.changedTouches[0].screenY;
+        touchVelocity = currentTouchY - lastTouchY;
+        lastTouchY = currentTouchY;
+        
+        // Add touch-based horizontal movement to middleground
+        totalScrollDistance += touchVelocity * 0.3;
+        
         onScroll(); // Trigger the same scroll effect
     }, { passive: true });
 

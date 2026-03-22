@@ -44,6 +44,39 @@ body {
     background-color: #f0f0f0;
 }
 
+.foreground-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('images/bg_fg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: translateY(0);
+    transition: transform 0.1s ease-out;
+    z-index: 2;
+}
+
+.middleground-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: 70vh;
+    background-image: url('images/cq-fg.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease-out;
+    z-index: 1;
+    /* Maintain aspect ratio and center the image */
+    aspect-ratio: 1;
+    max-width: 70vw;
+}
+
 /* Background image will automatically adjust with cover */
 /* No media query needed as cover handles all screen sizes */
 
