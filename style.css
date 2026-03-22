@@ -1,0 +1,156 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #333;
+    overflow-x: hidden;
+}
+
+/* Background container and image */
+.background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('images/bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: translateY(0);
+    transition: transform 0.1s ease-out;
+    /* Fallback background color */
+    background-color: #f0f0f0;
+}
+
+/* Background image will automatically adjust with cover */
+/* No media query needed as cover handles all screen sizes */
+
+/* Spacer divs for scroll effect demonstration */
+.spacer-top {
+    height: 30vh;
+    background: transparent;
+}
+
+.spacer-bottom {
+    height: 50vh;
+    background: transparent;
+}
+
+/* Main content styling */
+.content {
+    position: relative;
+    z-index: 2;
+    min-height: 50vh;
+    padding: 0;
+}
+
+/* Header styling */
+header {
+    text-align: center;
+    padding: 80px 20px 60px;
+}
+
+header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+header p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Content sections */
+.intro {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.intro h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.intro p {
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.content-block {
+    padding: 80px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.content-block h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+.content-block p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    max-width: 800px;
+    line-height: 1.8;
+}
+
+/* Footer styling */
+footer {
+    padding: 40px 20px;
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin-top: 80px;
+}
+
+footer p {
+    font-size: 0.9rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    header p {
+        font-size: 1rem;
+    }
+    
+    .content-block h2 {
+        font-size: 1.8rem;
+    }
+    
+    .content-block p {
+        font-size: 1rem;
+    }
+    
+    .content-block {
+        padding: 40px 20px;
+    }
+}
