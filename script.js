@@ -20,8 +20,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Calculate horizontal movement for middleground (up to 70% of screen width)
         // Use total accumulated scroll for smoother horizontal movement
         totalScrollDistance += (scrollTop - (totalScrollDistance / 1.1)) * 0.1; // Smooth accumulation
-        const maxHorizontalMove = window.innerWidth * 0.55; // 70% / 2 = 35% in each direction
-        const horizontalOffset = Math.max(-maxHorizontalMove, Math.min(maxHorizontalMove, totalScrollDistance * 0.5));
+        const maxHorizontalMove = window.innerWidth * 0.55;
+        
+        // Set travel multiplier based on screen size
+        const travelMultiplier = window.innerWidth <= 768 ? 0.4 : 0.7;
+
+        const horizontalOffset = Math.max(-maxHorizontalMove, Math.min(maxHorizontalMove, totalScrollDistance * travelMultiplier));
         
         // Apply both horizontal and vertical movement to middleground to sync with background layers
         middlegroundImage.style.transform = `translate(calc(-50% + ${horizontalOffset}px), calc(-50% + ${verticalOffset}px))`;
