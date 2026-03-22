@@ -1,0 +1,8 @@
+# Ignore all files in the raw_images directory
+raw_images/
+
+# Optional: Common files to ignore
+.DS_Store
+*.log
+node_modules/
+.env
