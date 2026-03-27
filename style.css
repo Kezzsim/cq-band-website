@@ -215,13 +215,19 @@ footer p {
 /* Social links styling */
 .social-links {
     margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    margin: 20px auto 0;
+    gap: 20px;
 }
 
-.instagram-link {
+.instagram-link,
+.bluesky-link {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: #E4405F;
     text-decoration: none;
     font-size: 16px;
     font-weight: 500;
@@ -230,6 +236,12 @@ footer p {
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(5px);
+    flex: 1;
+    justify-content: center;
+}
+
+.instagram-link {
+    color: #E4405F;
 }
 
 .instagram-link:hover {
@@ -238,13 +250,25 @@ footer p {
     transform: translateY(-2px);
 }
 
-.instagram-icon {
+.bluesky-link {
+    color: #1DA1F2;
+}
+
+.bluesky-link:hover {
+    color: #1A8CD8;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.instagram-icon,
+.bluesky-icon {
     width: 24px;
     height: 24px;
     transition: transform 0.3s ease;
 }
 
-.instagram-link:hover .instagram-icon {
+.instagram-link:hover .instagram-icon,
+.bluesky-link:hover .bluesky-icon {
     transform: scale(1.1);
 }
 
@@ -295,5 +319,25 @@ footer p {
     }
     
     /* Mobile footer adjustments */
-    footer p {\n        font-size: 28px;\n    }\n    \n    .instagram-link {\n        font-size: 14px;\n        padding: 8px 12px;\n    }\n    \n    .instagram-icon {\n        width: 20px;\n        height: 20px;\n    }
+    footer p {
+        font-size: 28px;
+    }
+    
+    .social-links {
+        flex-direction: column;
+        gap: 15px;
+        max-width: 280px;
+    }
+    
+    .instagram-link,
+    .bluesky-link {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+    
+    .instagram-icon,
+    .bluesky-icon {
+        width: 20px;
+        height: 20px;
+    }
 }
