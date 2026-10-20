@@ -1,94 +1,340 @@
-// Background scroll effect
-document.addEventListener('DOMContentLoaded', function() {
-    const backgroundImage = document.getElementById('backgroundImage');
-    const foregroundImage = document.getElementById('foregroundImage');
-    const middlegroundImage = document.getElementById('middlegroundImage');
-    let ticking = false;
-    let totalScrollDistance = 0;
+'use strict';
 
-    function updateBackgroundPosition() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        // Calculate the vertical offset: scroll distance * 20% (0.2)
-        const verticalOffset = scrollTop * -0.2;
-        
-        // Apply the same vertical transform to background and foreground layers
-        const verticalTransform = `translateY(${verticalOffset}px)`;
-        backgroundImage.style.transform = verticalTransform;
-        foregroundImage.style.transform = verticalTransform;
-        
-        // Calculate horizontal movement for middleground (up to 70% of screen width)
-        // Use total accumulated scroll for smoother horizontal movement
-        totalScrollDistance += (scrollTop - (totalScrollDistance / 1.1)) * 0.1; // Smooth accumulation
-        const maxHorizontalMove = window.innerWidth * 0.55;
-        
-        // Set travel multiplier based on screen size
-        const travelMultiplier = window.innerWidth <= 768 ? 0.25 : 0.7;
+const $ = (selector) => document.querySelector(selector);
+const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+const timeLabel = (seconds) => `${Math.floor((seconds || 0) / 60)}:${String(Math.floor((seconds || 0) % 60)).padStart(2, '0')}`;
+$('#year').textContent = new Date().getFullYear();
 
-        const horizontalOffset = Math.max(-maxHorizontalMove, Math.min(maxHorizontalMove, totalScrollDistance * travelMultiplier));
-        
-        // Apply both horizontal and vertical movement to middleground to sync with background layers
-        middlegroundImage.style.transform = `translate(calc(-50% + ${horizontalOffset}px), calc(-50% + ${verticalOffset}px))`;
-        
-        ticking = false;
+// The logo is an ordinary, high-priority image: no load event gates its animation.
+let scrollPending = false;
+function updateScroll() {
+  document.documentElement.style.setProperty('--scroll', Math.min(1, window.scrollY / 340));
+  scrollPending = false;
+}
+addEventListener('scroll', () => {
+  if (!scrollPending) { scrollPending = true; requestAnimationFrame(updateScroll); }
+}, { passive: true });
+updateScroll();
+
+function setupBackground() {
+  const videos = [...document.querySelectorAll('.background-video')];
+  const portrait = matchMedia('(orientation: portrait)');
+  let active = null;
+  let generation = 0;
+  let resizeTimer;
+  let paused = motionPreference.matches || Boolean(navigator.connection?.saveData);
+  const button = $('#motion-toggle');
+  const label = () => {
+    button.textContent = paused ? 'Play background' : 'Pause background';
+    button.setAttribute('aria-pressed', String(paused));
+  };
+  async function swap() {
+    const version = ++generation;
+    if (paused || document.hidden) return;
+    const source = `videobg/${portrait.matches ? 'portrait' : 'landscape'}.mp4`;
+    if (active?.getAttribute('src') === source) {
+      await active.play().catch(() => {});
+      return;
     }
+    const incoming = videos.find((video) => video !== active);
+    incoming.muted = true;
+    incoming.src = source;
+    incoming.load();
+    try {
+      // Keep the previous orientation on screen until the replacement is playable.
+      await new Promise((resolve, reject) => {
+        incoming.addEventListener('loadeddata', resolve, { once: true });
+        incoming.addEventListener('error', reject, { once: true });
+      });
+      if (version !== generation || paused || document.hidden) return;
+      if (active && Number.isFinite(incoming.duration)) incoming.currentTime = active.currentTime % incoming.duration;
+      await incoming.play();
+      if (version !== generation || paused || document.hidden) { incoming.pause(); return; }
+      const outgoing = active;
+      incoming.classList.add('is-visible');
+      outgoing?.classList.remove('is-visible');
+      active = incoming;
+      if (outgoing) setTimeout(() => { if (active !== outgoing) outgoing.pause(); }, 1300);
+    } catch { /* The poster remains visible if autoplay or the connection fails. */ }
+  }
+  button.addEventListener('click', () => {
+    paused = !paused;
+    label();
+    if (paused) { generation++; videos.forEach((video) => video.pause()); }
+    else swap();
+  });
+  motionPreference.addEventListener('change', (event) => {
+    paused = event.matches;
+    label();
+    if (paused) { generation++; videos.forEach((video) => video.pause()); } else swap();
+  });
+  portrait.addEventListener('change', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(swap, 300); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { generation++; videos.forEach((video) => video.pause()); }
+    else swap();
+  });
+  label();
+  // Give the initial logo request a head start without waiting for it to finish.
+  setTimeout(swap, 180);
+}
+setupBackground();
 
-    function onScroll() {
-        if (!ticking) {
-            requestAnimationFrame(updateBackgroundPosition);
-            ticking = true;
-        }
+async function setupPlayer() {
+  const audio = $('#audio');
+  const status = $('#player-status');
+  let tracks;
+  try {
+    const response = await fetch('./music/playlist.json');
+    if (!response.ok) throw new Error('Playlist unavailable');
+    tracks = await response.json();
+    if (!Array.isArray(tracks) || !tracks.length) throw new Error('No tracks');
+  } catch {
+    $('#track-title').textContent = 'The tape is taking a break';
+    status.textContent = 'Music could not be loaded. Please try again when you’re connected.';
+    return;
+  }
+  let current = 0;
+  const controls = ['#play', '#stop', '#next', '#previous'];
+  controls.forEach((selector) => { $(selector).disabled = false; });
+  const seek = $('#seek');
+  function updatePosition() {
+    const duration = Number.isFinite(audio.duration) ? audio.duration : tracks[current].duration;
+    $('#elapsed').textContent = timeLabel(audio.currentTime);
+    $('#duration').textContent = timeLabel(duration);
+    seek.disabled = !Number.isFinite(audio.duration);
+    seek.value = duration ? Math.round(audio.currentTime / duration * 1000) : 0;
+    seek.setAttribute('aria-valuetext', `${timeLabel(audio.currentTime)} of ${timeLabel(duration)}`);
+    if ('mediaSession' in navigator && Number.isFinite(audio.duration) && audio.duration > 0) {
+      try { navigator.mediaSession.setPositionState({ duration: audio.duration, playbackRate: audio.playbackRate, position: Math.min(audio.currentTime, audio.duration) }); } catch { /* Optional browser feature. */ }
     }
+  }
+  async function play() {
+    status.textContent = '';
+    try { await audio.play(); }
+    catch (error) {
+      // A quick stop or track change intentionally aborts an outstanding play().
+      if (error.name !== 'AbortError') status.textContent = 'Playback couldn’t start. Tap play to try again.';
+    }
+  }
+  function select(index, autoplay = false) {
+    current = (index + tracks.length) % tracks.length;
+    const track = tracks[current];
+    audio.src = track.src;
+    $('#track-title').textContent = track.title;
+    $('#track-credit').textContent = [track.artist, track.album].filter(Boolean).join(' / ');
+    $('#track-tags').textContent = [track.year, track.genre, track.composer && `Written by ${track.composer}`].filter(Boolean).join(' · ');
+    $('#track-counter').textContent = `${String(current + 1).padStart(2, '0')} / ${String(tracks.length).padStart(2, '0')}`;
+    $('#download').href = track.src;
+    $('#download').download = track.file;
+    $('#download').hidden = false;
+    $('#download').setAttribute('aria-label', `Download ${track.title} as MP3`);
+    document.querySelectorAll('.track-button').forEach((button, index) => button.setAttribute('aria-current', String(index === current)));
+    status.textContent = '';
+    setPlaying(false);
+    updatePosition();
+    if ('mediaSession' in navigator && 'MediaMetadata' in window) {
+      navigator.mediaSession.metadata = new MediaMetadata({ title: track.title, artist: track.artist || 'Carrion Queen', album: track.album || 'Bootlegs' });
+    }
+    if (autoplay) play();
+  }
+  function setPlaying(playing) {
+    $('#player').classList.toggle('is-playing', playing);
+    $('#play').setAttribute('aria-label', playing ? 'Pause' : 'Play');
+    $('#play-icon').setAttribute('d', playing ? 'M6 5h4v14H6zm8 0h4v14h-4z' : 'm8 5 12 7-12 7z');
+    $('#playback-state').textContent = playing ? 'Now playing / let it roll' : 'Ready when you are';
+    if ('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
+  }
+  function stop() { audio.pause(); audio.currentTime = 0; updatePosition(); $('#playback-state').textContent = 'Tape stopped / back to the start'; }
+  tracks.forEach((track, index) => {
+    const li = document.createElement('li');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'track-button';
+    const number = document.createElement('span');
+    number.className = 'track-number';
+    number.textContent = String(index + 1).padStart(2, '0');
+    const title = document.createElement('span');
+    title.textContent = track.title;
+    const length = document.createElement('span');
+    length.className = 'track-length';
+    length.textContent = timeLabel(track.duration);
+    button.append(number, title, length);
+    button.addEventListener('click', () => select(index, true));
+    li.append(button);
+    $('#playlist').append(li);
+  });
+  $('#play').addEventListener('click', () => audio.paused ? play() : audio.pause());
+  $('#stop').addEventListener('click', stop);
+  $('#next').addEventListener('click', () => select(current + 1, !audio.paused));
+  $('#previous').addEventListener('click', () => select(current - 1, !audio.paused));
+  seek.addEventListener('input', () => { if (Number.isFinite(audio.duration)) { audio.currentTime = Number(seek.value) / 1000 * audio.duration; updatePosition(); } });
+  audio.addEventListener('play', () => setPlaying(true));
+  audio.addEventListener('pause', () => setPlaying(false));
+  audio.addEventListener('ended', () => select(current + 1, true));
+  audio.addEventListener('timeupdate', updatePosition);
+  audio.addEventListener('loadedmetadata', updatePosition);
+  audio.addEventListener('error', () => { setPlaying(false); status.textContent = 'This track couldn’t load. Try another track or check your connection.'; });
+  audio.addEventListener('waiting', () => { status.textContent = 'Winding the tape…'; });
+  audio.addEventListener('playing', () => { status.textContent = ''; });
+  if ('mediaSession' in navigator) {
+    const handlers = { play, pause: () => audio.pause(), stop, previoustrack: () => select(current - 1, true), nexttrack: () => select(current + 1, true), seekto: (details) => { if (Number.isFinite(audio.duration)) audio.currentTime = Math.max(0, Math.min(audio.duration, details.seekTime)); }, seekbackward: (details) => { audio.currentTime = Math.max(0, audio.currentTime - (details.seekOffset || 10)); }, seekforward: (details) => { if (Number.isFinite(audio.duration)) audio.currentTime = Math.min(audio.duration, audio.currentTime + (details.seekOffset || 10)); } };
+    Object.entries(handlers).forEach(([action, handler]) => { try { navigator.mediaSession.setActionHandler(action, handler); } catch { /* Not every platform supports every action. */ } });
+  }
+  select(0);
+}
+setupPlayer();
 
-    // Add scroll event listener
-    window.addEventListener('scroll', onScroll, { passive: true });
+const svgNamespace = 'http://www.w3.org/2000/svg';
+function svgElement(tag, attributes, text) {
+  const element = document.createElementNS(svgNamespace, tag);
+  Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
+  if (text !== undefined) element.textContent = text;
+  return element;
+}
+function localDate(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const [year, month, day] = value.split('-').map(Number);
+  const date = new Date(year, month - 1, day);
+  return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day ? date : null;
+}
+function coordinates(location) {
+  const values = typeof location === 'string' ? location.split(',').map((part) => Number(part.trim())) : [];
+  return values.length === 2 && values.every(Number.isFinite) && Math.abs(values[0]) <= 90 && Math.abs(values[1]) <= 180 ? values : null;
+}
+function detailValue(value) { return typeof value === 'object' && value !== null ? JSON.stringify(value, null, 2) : String(value); }
 
-    // Handle touch events for better mobile experience
-    let touchStartY = 0;
-    let lastTouchY = 0;
-    let touchVelocity = 0;
-
-    document.addEventListener('touchstart', function(e) {
-        touchStartY = e.changedTouches[0].screenY;
-        lastTouchY = touchStartY;
-    }, { passive: true });
-
-    document.addEventListener('touchmove', function(e) {
-        const currentTouchY = e.changedTouches[0].screenY;
-        touchVelocity = currentTouchY - lastTouchY;
-        lastTouchY = currentTouchY;
-        
-        // Add touch-based horizontal movement to middleground
-        totalScrollDistance += touchVelocity * 0.3;
-        
-        onScroll(); // Trigger the same scroll effect
-    }, { passive: true });
-
-    // Optional: Add mouse wheel support for more precise control
-    window.addEventListener('wheel', function(e) {
-        // Let the default scrolling behavior happen, then update background
-        setTimeout(onScroll, 0);
-    }, { passive: true });
-
-    // Initialize background position
-    updateBackgroundPosition();
-});
-
-// Smooth scroll for any anchor links (optional enhancement)
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
+async function setupCalendar() {
+  try {
+    const response = await fetch('./calendar.json', { cache: 'no-cache' });
+    if (!response.ok) throw new Error('Calendar unavailable');
+    const data = await response.json();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const events = (Array.isArray(data) ? data : data.events || [])
+      .filter((event) => event && localDate(event.date) >= today && localDate(event.date) !== null)
+      .sort((a, b) => a.date.localeCompare(b.date));
+    if (!events.length) return;
+    const months = Map.groupBy ? Map.groupBy(events, (event) => event.date.slice(0, 7)) : events.reduce((map, event) => { const key = event.date.slice(0, 7); map.set(key, [...(map.get(key) || []), event]); return map; }, new Map());
+    let selectedDate;
+    function showMap(event) {
+      const container = $('#show-map');
+      container.replaceChildren();
+      const point = coordinates(event.location);
+      if (!point) return;
+      const [lat, lon] = point;
+      const frame = document.createElement('iframe');
+      frame.className = 'map-frame';
+      frame.title = `Map: ${event.title || 'Show location'}`;
+      frame.loading = 'lazy';
+      frame.referrerPolicy = 'no-referrer';
+      const bounds = [Math.max(-180, lon - .025), Math.max(-90, lat - .016), Math.min(180, lon + .025), Math.min(90, lat + .016)];
+      frame.src = `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(bounds.join(','))}&layer=mapnik&marker=${lat}%2C${lon}`;
+      const link = document.createElement('a');
+      link.className = 'map-link';
+      link.href = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=15/${lat}/${lon}`;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = 'Open location in OpenStreetMap ↗';
+      container.append(frame, link);
+    }
+    function selectDate(date) {
+      if (date === selectedDate) return;
+      selectedDate = date;
+      document.querySelectorAll('.calendar-event').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.date === date)));
+      const details = $('#show-details');
+      details.replaceChildren();
+      const onDate = events.filter((event) => event.date === date);
+      onDate.forEach((event) => {
+        const card = document.createElement('article');
+        card.className = 'show-card';
+        const when = document.createElement('p');
+        when.className = 'show-date';
+        when.textContent = [localDate(date).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }), event.time].filter(Boolean).join(' / ');
+        const title = document.createElement('h3');
+        title.textContent = event.title || 'Carrion Queen live';
+        const list = document.createElement('dl');
+        Object.entries(event).forEach(([key, value]) => {
+          if (['title', 'date', 'time'].includes(key) || value == null || value === '') return;
+          const term = document.createElement('dt');
+          term.textContent = key.replace(/[_-]/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2');
+          const description = document.createElement('dd');
+          if (typeof value === 'string' && /^https?:\/\//i.test(value)) {
+            const link = document.createElement('a');
+            link.href = value; link.textContent = value; link.target = '_blank'; link.rel = 'noopener noreferrer';
+            description.append(link);
+          } else description.textContent = detailValue(value);
+          list.append(term, description);
+        });
+        card.append(when, title, list);
+        details.append(card);
+      });
+      const mapped = onDate.filter((event) => coordinates(event.location));
+      if (mapped.length > 1) {
+        const switcher = document.createElement('div');
+        switcher.className = 'map-switcher';
+        mapped.forEach((event, index) => {
+          const button = document.createElement('button');
+          button.textContent = event.title || `Location ${index + 1}`;
+          button.setAttribute('aria-pressed', String(index === 0));
+          button.addEventListener('click', () => { switcher.querySelectorAll('button').forEach((item) => item.setAttribute('aria-pressed', String(item === button))); showMap(event); });
+          switcher.append(button);
+        });
+        details.append(switcher);
+      }
+      if (mapped.length) showMap(mapped[0]); else $('#show-map').replaceChildren();
+    }
+    months.forEach((monthEvents, month) => {
+      const first = localDate(`${month}-01`);
+      const days = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+      const rows = Math.ceil((first.getDay() + days) / 7);
+      const wrapper = document.createElement('div');
+      wrapper.className = 'month';
+      const heading = document.createElement('h3');
+      heading.textContent = first.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+      const svg = svgElement('svg', { viewBox: `0 0 280 ${rows * 37 + 28}`, role: 'group', 'aria-label': `${heading.textContent} show calendar` });
+      ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach((label, index) => svg.append(svgElement('text', { x: index * 40 + 20, y: 12, 'text-anchor': 'middle', class: 'weekday' }, label)));
+      for (let day = 1; day <= days; day++) {
+        const index = first.getDay() + day - 1;
+        const x = (index % 7) * 40 + 20;
+        const y = Math.floor(index / 7) * 37 + 40;
+        const date = `${month}-${String(day).padStart(2, '0')}`;
+        const shows = monthEvents.filter((event) => event.date === date);
+        if (shows.length) {
+          const label = `${localDate(date).toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}: ${shows.map((event) => event.title).join('; ')}`;
+          const group = svgElement('g', { class: 'calendar-event', role: 'button', tabindex: '0', 'aria-label': label, 'aria-pressed': 'false', 'data-date': date });
+          group.append(svgElement('title', {}, label), svgElement('rect', { x: x - 19, y: y - 18, width: 38, height: 37, class: 'event-ring', rx: 2 }), svgElement('text', { x, y, 'text-anchor': 'middle' }, day), svgElement('circle', { cx: x, cy: y + 9, r: 3, class: 'event-dot' }));
+          group.addEventListener('click', () => selectDate(date));
+          group.addEventListener('pointerenter', (event) => { if (event.pointerType === 'mouse') selectDate(date); });
+          group.addEventListener('focus', () => selectDate(date));
+          group.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); selectDate(date); } });
+          svg.append(group);
+        } else svg.append(svgElement('text', { x, y, 'text-anchor': 'middle', class: localDate(date) < today ? 'day-past' : '' }, day));
+      }
+      wrapper.append(heading, svg);
+      $('#calendars').append(wrapper);
     });
-});
+    $('#shows').hidden = false;
+    selectDate(events[0].date);
+  } catch (error) { console.warn('Show calendar could not be loaded:', error); }
+}
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries) => {
+    if (entries.some((entry) => entry.isIntersecting)) { setupCalendar(); observer.disconnect(); }
+  }, { rootMargin: '400px' });
+  observer.observe($('#bootlegs'));
+} else setupCalendar();
 
-// Optional: Add loading state management
-window.addEventListener('load', function() {
-    document.body.classList.add('loaded');
+let installPrompt;
+addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault(); installPrompt = event; $('#install').hidden = false;
+});
+$('#install').addEventListener('click', async () => {
+  if (!installPrompt) return;
+  await installPrompt.prompt();
+  await installPrompt.userChoice;
+  installPrompt = null; $('#install').hidden = true;
+});
+addEventListener('appinstalled', () => { $('#install').hidden = true; installPrompt = null; });
+if ('serviceWorker' in navigator) addEventListener('load', () => {
+  navigator.serviceWorker.register('./sw.js').catch((error) => console.warn('Offline support unavailable:', error));
 });

@@ -1,0 +1,22 @@
+{
+    "events": [
+        {
+            "title": "Luna Sage's 3rd Annual Halloween Backyard Bash",
+            "date": "2026-10-24",
+            "time": "4:00 PM EST",
+            "location": "40.6949904,-73.4062496"
+        },
+        {
+            "title": "Furpocalypse: Rock 'n Roll Nightmare!",
+            "date": "2026-10-31",
+            "time": "5:00 PM EST",
+            "location": "41.0433162,-74.7699236"
+        },
+        {
+            "title": "Monthly Katie's of Smithtown performance",
+            "date": "2026-11-25",
+            "time": "6:00 PM EST",
+            "location": "40.8557006,-73.2022971"
+        }
+    ]
+}
