@@ -24,6 +24,38 @@ const revealCoyote = () => {
 coyote.addEventListener('load', revealCoyote, { once: true });
 if (coyote.complete) revealCoyote();
 
+// Enumerate random lyrics from our songs to use as callout flavortext lol
+const lyricShout = [
+  "I'm a mass of skin and bone",
+  "Taking a still of an object in motion",
+  "Let the blood spill! Let the darkness come!",
+  "Make your hands into my own little home",
+  "Like some cryptid born, of the leyline"
+];
+
+let shoutAnimation;
+function updateLyricShout(animate = false) {
+  const stamp = $('.stamp');
+  if (!stamp || !lyricShout.length) return;
+  const choices = lyricShout.filter((lyric) => `"${lyric}"` !== stamp.textContent);
+  const pool = choices.length ? choices : lyricShout;
+  stamp.textContent = `"${pool[Math.floor(Math.random() * pool.length)]}"`;
+  shoutAnimation?.cancel();
+  if (animate && !motionPreference.matches) {
+    shoutAnimation = stamp.animate([
+      { transform: 'translateY(0) rotate(7deg)' },
+      { transform: 'translateY(-8px) rotate(2deg)', offset: .3 },
+      { transform: 'translateY(-4px) rotate(11deg)', offset: .55 },
+      { transform: 'translateY(1px) rotate(5deg)', offset: .8 },
+      { transform: 'translateY(0) rotate(7deg)' },
+    ], { duration: 340, easing: 'ease-out' });
+  }
+}
+updateLyricShout();
+motionPreference.addEventListener('change', (event) => {
+  if (event.matches) shoutAnimation?.cancel();
+});
+
 function setupBackground() {
   const videos = [...document.querySelectorAll('.background-video')];
   const portrait = matchMedia('(orientation: portrait)');
@@ -117,6 +149,7 @@ async function setupPlayer() {
     }
   }
   async function play() {
+    updateLyricShout(true);
     status.textContent = '';
     try { await audio.play(); }
     catch (error) {
@@ -125,6 +158,7 @@ async function setupPlayer() {
     }
   }
   function select(index, autoplay = false) {
+    const previousTrack = current;
     current = (index + tracks.length) % tracks.length;
     const track = tracks[current];
     audio.src = track.src;
@@ -144,6 +178,7 @@ async function setupPlayer() {
       navigator.mediaSession.metadata = new MediaMetadata({ title: track.title, artist: track.artist || 'Carrion Queen', album: track.album || 'Bootlegs' });
     }
     if (autoplay) play();
+    else if (current !== previousTrack) updateLyricShout(true);
   }
   function setPlaying(playing) {
     $('#player').classList.toggle('is-playing', playing);
@@ -171,7 +206,11 @@ async function setupPlayer() {
     li.append(button);
     $('#playlist').append(li);
   });
-  $('#play').addEventListener('click', () => audio.paused ? play() : audio.pause());
+  $('#play').addEventListener('click', () => {
+    if (audio.paused) {
+      play();
+    } else audio.pause();
+  });
   $('#stop').addEventListener('click', stop);
   $('#next').addEventListener('click', () => select(current + 1, !audio.paused));
   $('#previous').addEventListener('click', () => select(current - 1, !audio.paused));

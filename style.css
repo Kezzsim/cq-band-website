@@ -35,6 +35,8 @@ h1,h2,h3,
 .intro>p:nth-child(2){font-size:23px}
 .section-number{font-size:16px}
 .stamp{font-size:20px}
+.section-heading{flex-wrap:wrap}
+.stamp{max-width:min(55%,300px);white-space:normal;text-align:center;line-height:1.15;overflow-wrap:anywhere}
 .player-topline{font-size:14px;letter-spacing:.5px}
 .cassette-brand{font-size:clamp(16px,3.3vw,24px)}
 .cassette-handwriting{font-size:clamp(17px,3.5vw,25px)}
