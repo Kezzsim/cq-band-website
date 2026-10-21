@@ -34,10 +34,13 @@ jobs:
           cp gig-map.js _site/
           cp cassette.css _site/
           cp -R assets _site/assets
+          cp -R images _site/images
           cp -R music _site/music
           mkdir _site/videobg
           cp videobg/landscape.mp4 videobg/portrait.mp4 videobg/landscape.jpg videobg/portrait.jpg _site/videobg/
           touch _site/.nojekyll
+      - name: Verify social preview metadata and published images
+        run: python3 scripts/check-social-previews.py _site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

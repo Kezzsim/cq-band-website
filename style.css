@@ -123,25 +123,62 @@ svg.inline-symbol{display:inline-block;width:1em;height:1em;vertical-align:-.125
   .backdrop,.coyote-layer.is-ready{animation:none;opacity:1}
 }
 
-/* Leave a full opening scene on phones and narrow portrait tablets. The intro
-   supplies the invisible space, so the first section starts below the fold. */
-@media(max-width:767px),(max-width:999px) and (orientation:portrait){
-  :root{
-    --opening-logo-width:min(680px,94vw);
-    --opening-top-space:30px;
-    --opening-logo-gap:32px;
-  }
-  .intro{
-    min-height:calc(100svh - var(--opening-top-space) - var(--opening-logo-width) * 563 / 1000 - var(--opening-logo-gap));
-  }
+/* One opening viewport on every device. Shared dimensions keep the invisible
+   intro space in sync with the logo without waiting for JavaScript or fonts. */
+:root{
+  --opening-top-space:30px;
+  --opening-logo-gap:32px;
+  --opening-logo-width:min(680px,94vw,calc((100svh - 300px) * 1000 / 563));
 }
+.masthead{margin-top:var(--opening-top-space);padding-bottom:var(--opening-logo-gap)}
+.masthead h1{width:var(--opening-logo-width)}
+.intro{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:calc(100vh - var(--opening-top-space) - var(--opening-logo-width) * 563 / 1000 - var(--opening-logo-gap));
+  min-height:calc(100dvh - var(--opening-top-space) - var(--opening-logo-width) * 563 / 1000 - var(--opening-logo-gap));
+  padding-bottom:max(28px,env(safe-area-inset-bottom));
+}
+.intro .eyebrow{font-size:18px;letter-spacing:1.5px}
+.intro>p:nth-child(2){font-size:30px;line-height:1.5;margin:14px 0 22px}
+.intro .scroll-cue{margin-top:auto;flex-shrink:0;font-size:36px;line-height:1.2;padding:6px 16px}
+#bootlegs{padding-top:24px}
 @media(max-width:540px){
   :root{--opening-top-space:22px;--opening-logo-gap:24px}
+  .intro .eyebrow{font-size:16px;letter-spacing:1px}
+  .intro>p:nth-child(2){font-size:27px}
 }
-@media(max-width:767px) and (max-height:540px) and (orientation:landscape){
-  :root{
-    --opening-logo-width:min(680px,94vw,90svh);
-    --opening-top-space:16px;
-    --opening-logo-gap:20px;
-  }
+@media(min-width:1000px){
+  :root{--opening-top-space:42px}
+  .content{max-width:840px;padding:0 24px;font-size:18px}
+  .paper{padding:32px 36px}
+  h2{font-size:52px}
+  .eyebrow{font-size:16px}
+  .intro .eyebrow{font-size:20px}
+  .intro>p:nth-child(2){font-size:34px}
+  .section-number{font-size:18px}
+  .stamp{font-size:22px;max-width:min(55%,340px)}
+  .player-topline{font-size:16px}
+  .now-playing h3{font-size:32px}
+  .now-playing>p:not(.eyebrow){font-size:18px}
+  .now-playing .eyebrow{font-size:20px}
+  .time-labels,.track-number,.track-length{font-size:17px}
+  .track-button{font-size:20px}
+  .download{font-size:17px}
+  .player-note,.calendar-hint,.signoff{font-size:22px}
+  .status,.show-card p,.show-card dl{font-size:18px}
+  .month h3{font-size:24px}
+  .month svg{font-size:18px}
+  .weekday{font-size:15px}
+  .show-date{font-size:17px}
+  .show-card h3{font-size:27px}
+  .map-link,.map-switcher button,.social-link small,.site-tools button,.copyright{font-size:17px}
+  .social-link>span:not(.external){font-size:27px}
+}
+@media(max-height:540px) and (orientation:landscape){
+  :root{--opening-top-space:16px;--opening-logo-gap:20px}
+  .intro .eyebrow{font-size:16px}
+  .intro>p:nth-child(2){font-size:26px;margin:8px 0 14px}
+  .intro{padding-bottom:18px}
 }
