@@ -55,6 +55,16 @@ h1,h2,h3,
 @keyframes spin{to{transform:rotate(360deg)}}
 .symbol-definitions{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
 svg.inline-symbol{display:inline-block;width:1em;height:1em;vertical-align:-.125em;fill:currentColor}
+.gig-map{height:clamp(260px,55vw,340px);width:100%;position:relative;isolation:isolate;z-index:0;background:#20231f;border:1px solid #20211c55;color:#eeecdf;font:14px/1.5 Arial,sans-serif}
+.gig-map .leaflet-tile-pane{filter:grayscale(1) invert(1) brightness(.85) contrast(1.15)}
+.gig-map .leaflet-control-zoom a{background:#20231f;color:#eeecdf;border-color:#707466;width:40px;height:40px;line-height:40px;font:700 25px/40px Arial,sans-serif}
+.gig-map .leaflet-control-zoom a:hover{background:#343a2c;color:var(--acid)}
+.gig-map .leaflet-control-zoom a.leaflet-disabled{color:#888}
+.gig-map-pin svg{width:32px;height:42px;overflow:visible;filter:drop-shadow(0 2px 3px #000)}
+.gig-map-pin path{fill:var(--acid);stroke:#171816;stroke-width:2}
+.gig-map-pin circle{fill:#171816}
+.map-attribution{margin:0;padding:8px 10px;background:#20231f;color:#eeecdf;font:11px/1.5 Arial,sans-serif}
+.map-attribution a{color:inherit}
 /* Graphic marks stay monochrome, like ink on a photocopied show flyer. */
 .instagram>svg{fill:none}
 .cassette-label{background-image:linear-gradient(transparent 66%,var(--ink) 66%,var(--ink) 72%,transparent 72%,transparent 75%,var(--ink) 75%,var(--ink) 79%,transparent 79%,transparent 82%,var(--ink) 82%,var(--ink) 84%,transparent 84%)}

@@ -263,26 +263,48 @@ async function setupCalendar() {
     if (!events.length) return;
     const months = Map.groupBy ? Map.groupBy(events, (event) => event.date.slice(0, 7)) : events.reduce((map, event) => { const key = event.date.slice(0, 7); map.set(key, [...(map.get(key) || []), event]); return map; }, new Map());
     let selectedDate;
+    let cleanupMap = () => {};
     function showMap(event) {
+      cleanupMap();
       const container = $('#show-map');
       container.replaceChildren();
       const point = coordinates(event.location);
       if (!point) return;
       const [lat, lon] = point;
-      const frame = document.createElement('iframe');
-      frame.className = 'map-frame';
-      frame.title = `Map: ${event.title || 'Show location'}`;
-      frame.loading = 'lazy';
-      frame.referrerPolicy = 'no-referrer';
-      const bounds = [Math.max(-180, lon - .025), Math.max(-90, lat - .016), Math.min(180, lon + .025), Math.min(90, lat + .016)];
-      frame.src = `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(bounds.join(','))}&layer=mapnik&marker=${lat}%2C${lon}`;
+      const frame = document.createElement('div');
+      frame.className = 'gig-map';
+      frame.setAttribute('role', 'region');
+      frame.setAttribute('aria-label', `Map: ${event.title || 'Show location'}`);
+      const attribution = document.createElement('p');
+      attribution.className = 'map-attribution';
+      attribution.innerHTML = '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a> · <a href="https://leafletjs.com" target="_blank" rel="noopener noreferrer">Leaflet</a>';
       const link = document.createElement('a');
       link.className = 'map-link';
       link.href = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=15/${lat}/${lon}`;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.textContent = 'Open location in OpenStreetMap ↗';
-      container.append(frame, link);
+      container.append(frame, attribution, link);
+      let dispose = () => {};
+      let observer;
+      const load = async () => {
+        observer?.disconnect();
+        try {
+          const { createGigMap } = await import('./gig-map.js');
+          if (!frame.isConnected) return;
+          dispose = await createGigMap(frame, point, event.title || 'Show location');
+          if (!frame.isConnected) dispose();
+        } catch {
+          if (frame.isConnected) frame.textContent = 'Map unavailable. Use the OpenStreetMap link below.';
+        }
+      };
+      if ('IntersectionObserver' in window) {
+        observer = new IntersectionObserver((entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) load();
+        });
+        observer.observe(frame);
+      } else load();
+      cleanupMap = () => { observer?.disconnect(); dispose(); };
     }
     function selectDate(date) {
       if (date === selectedDate) return;
@@ -301,7 +323,7 @@ async function setupCalendar() {
         title.textContent = event.title || 'Carrion Queen live';
         const list = document.createElement('dl');
         Object.entries(event).forEach(([key, value]) => {
-          if (['title', 'date', 'time'].includes(key) || value == null || value === '') return;
+          if (['title', 'date', 'time'].includes(key) || (key === 'location' && coordinates(value)) || value == null || value === '') return;
           const term = document.createElement('dt');
           term.textContent = key.replace(/[_-]/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2');
           const description = document.createElement('dd');
@@ -328,7 +350,7 @@ async function setupCalendar() {
         });
         details.append(switcher);
       }
-      if (mapped.length) showMap(mapped[0]); else $('#show-map').replaceChildren();
+      if (mapped.length) showMap(mapped[0]); else { cleanupMap(); $('#show-map').replaceChildren(); }
     }
     months.forEach((monthEvents, month) => {
       const first = localDate(`${month}-01`);

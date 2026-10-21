@@ -53,8 +53,17 @@ Dates are local `YYYY-MM-DD` values. Only today and future dates appear; only
 months with shows are rendered. An empty events array hides the entire shows
 section. Hover, tap, or keyboard-focus a marked date to view all its shows.
 Additional keys are automatically rendered as detail text (HTTP/HTTPS URLs
-become links). `location` is an optional `latitude,longitude` pair for the
-lazy-loaded OpenStreetMap embed. Multiple shows on one date are supported.
+become links). `location` is an optional `latitude,longitude` pair used only by
+the map; coordinates are omitted from visible event details. Text locations
+still appear as details. Multiple shows on one date are supported.
+
+Maps use lazy-loaded Leaflet 1.9.4 with standard OpenStreetMap tiles. A CSS
+filter on `.leaflet-tile-pane` provides the dark, monochrome treatment without
+affecting the high-contrast pin or controls. Attribution stays visible in a
+compact strip below the map instead of covering its contents. Leaflet loads
+from unpkg with integrity checks; if unavailable, the direct OSM link remains.
+Only visible maps request tiles; browser caching is preserved and tiles are
+not downloaded for offline use. See the [OSM tile usage policy](https://operations.osmfoundation.org/policies/tiles/).
 
 ## Background assets
 
