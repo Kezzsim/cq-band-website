@@ -141,7 +141,7 @@ async function setupPlayer() {
     $('#player').classList.toggle('is-playing', playing);
     $('#play').setAttribute('aria-label', playing ? 'Pause' : 'Play');
     $('#play-icon').setAttribute('d', playing ? 'M6 5h4v14H6zm8 0h4v14h-4z' : 'm8 5 12 7-12 7z');
-    $('#playback-state').textContent = playing ? 'Now playing / let it roll' : 'Ready when you are';
+    $('#playback-state').textContent = playing ? 'Now playing' : 'Press play';
     if ('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
   }
   function stop() { audio.pause(); audio.currentTime = 0; updatePosition(); $('#playback-state').textContent = 'Tape stopped / back to the start'; }

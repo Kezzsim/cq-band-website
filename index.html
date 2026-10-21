@@ -3,14 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Carrion Queen — otherworldly folk punk. Listen to bootlegs, find upcoming shows, and follow the noise.">
+  <meta name="description" content="Carrion Queen — Music for queer little critters">
   <meta name="theme-color" content="#171816">
+
+  <meta name="keywords" content="Live Music, Bookings, Folk Punk, Therian, Long Island, Music, Mandolin, Guitar, Bass, Drums, AJJ but gayer, Trans">
+
+  <title>Carrion Queen</title>
+  
+  <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="Carrion Queen">
-  <meta property="og:description" content="Otherworldly folk punk. Bootlegs, live shows, and a little noise from the woods.">
+  <meta property="og:description" content="We make furry punk music, but it's still really good music.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://queen.carri.one">
-  <meta property="og:image" content="https://queen.carri.one/web-app-manifest-512x512.png">
-  <title>Carrion Queen — Bootlegs & live shows</title>
+  <meta property="og:image" content="https://queen.carri.one/images/og-image.jpg">
+  <meta property="og:site_name" content="Carrion Queen">
+    
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Carrion Queen">
+  <meta name="twitter:description" content="Carrion Queen : music for therians">
+  <meta name="twitter:image" content="https://queen.carri.one/images/twitter-image.jpg">
+    
   <link rel="icon" href="./favicon.ico" sizes="any">
   <link rel="icon" href="./favicon-96x96.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="./web-app-manifest-192x192.png">
@@ -20,7 +33,7 @@
   <script src="./script.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#bootlegs">Skip to the music</a>
+  <a class="skip-link" href="#bootlegs">Jump to bootlegs</a>
   <div class="backdrop" aria-hidden="true">
     <video class="background-video" muted loop playsinline preload="none" tabindex="-1" disablepictureinpicture></video>
     <video class="background-video" muted loop playsinline preload="none" tabindex="-1" disablepictureinpicture></video>
@@ -30,31 +43,30 @@
     <h1><img class="logo" src="./Logo.webp" alt="Carrion Queen" width="1000" height="563" fetchpriority="high"></h1>
   </header>
   <main class="content">
-    <div class="intro"><p class="eyebrow">Long Island, NY / Folk punk</p><p>Otherworldly music. Earthbound noise.</p><a class="scroll-cue" href="#bootlegs" aria-label="Scroll to bootlegs">↓</a></div>
+    <div class="intro"><p class="eyebrow">New York, NY / Rock & Folk punk</p><p>Music for queer little critters</p><a class="scroll-cue" href="#bootlegs" aria-label="Scroll to bootlegs">↓</a></div>
     <section id="bootlegs" class="section" aria-labelledby="bootlegs-title">
-      <div class="section-heading"><span class="section-number" aria-hidden="true">01 /</span><h2 id="bootlegs-title">Bootlegs</h2><span class="stamp">Turn it up</span></div>
+      <div class="section-heading"><span class="section-number" aria-hidden="true">01 /</span><h2 id="bootlegs-title">Bootlegs</h2><span class="stamp">Hey, Listen!</span></div>
       <div class="paper player" id="player">
-        <div class="player-topline"><span>Homegrown & hand-recorded</span><span id="track-counter">SIDE A</span></div>
+        <div class="player-topline"><span>We're still working on our first album, hope these will hold ya over</span><span id="track-counter">SIDE A</span></div>
         <div class="cassette" aria-hidden="true">
           <span class="screw screw-tl">+</span><span class="screw screw-tr">+</span>
-          <div class="cassette-label"><span class="cassette-brand">CARRION QUEEN</span><span class="cassette-side">A</span><span class="cassette-handwriting">bootlegs / play loud</span>
+          <div class="cassette-label"><span class="cassette-brand">CARRION QUEEN</span><span class="cassette-side">A</span><span class="cassette-handwriting">Fourth leg records</span>
             <div class="tape-window"><span class="reel"></span><span class="tape-bridge"></span><span class="reel"></span></div>
-            <div class="cassette-rule"></div><span class="cassette-spec">NORMAL BIAS · DIY FOREVER · C-90</span>
+            <div class="cassette-rule"></div><span class="cassette-spec">HIGH BIAS · C-90</span>
           </div>
           <div class="cassette-foot"><i></i><i></i><i></i><i></i></div><span class="screw screw-bl">+</span><span class="screw screw-br">+</span>
         </div>
-        <div class="now-playing"><p class="eyebrow" id="playback-state">Ready when you are</p><h3 id="track-title">Loading the tape…</h3><p id="track-credit">Carrion Queen</p><p class="track-tags" id="track-tags"></p></div>
+        <div class="now-playing"><p class="eyebrow" id="playback-state">Press play</p><h3 id="track-title">Loading the tape…</h3><p id="track-credit">Carrion Queen</p><p class="track-tags" id="track-tags"></p></div>
         <div class="timeline"><label class="sr-only" for="seek">Track position</label><input id="seek" type="range" min="0" max="1000" value="0" disabled><div class="time-labels"><span id="elapsed">0:00</span><span id="duration">0:00</span></div></div>
         <div class="transport">
           <button id="previous" class="control" aria-label="Previous track" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h3v14H5zm14 0v14L9 12z"/></svg></button>
           <button id="play" class="control play-button" aria-label="Play" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path id="play-icon" d="m8 5 12 7-12 7z"/></svg></button>
           <button id="stop" class="control" aria-label="Stop" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg></button>
           <button id="next" class="control" aria-label="Next track" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h3v14h-3zM5 5l10 7-10 7z"/></svg></button>
-          <a id="download" class="download" hidden download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3h2v10l4-4 1.4 1.4L12 17l-6.4-6.6L7 9l4 4zM4 18h2v2h12v-2h2v4H4z"/></svg><span>Keep it</span></a>
+          <a id="download" class="download" hidden download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3h2v10l4-4 1.4 1.4L12 17l-6.4-6.6L7 9l4 4zM4 18h2v2h12v-2h2v4H4z"/></svg><span>Download</span></a>
         </div>
         <ol class="playlist" id="playlist" aria-label="Bootleg playlist"></ol>
         <p class="status" id="player-status" role="status"></p>
-        <p class="player-note">Free to listen. Free to take with you.</p>
         <audio id="audio" preload="none"></audio>
       </div>
     </section>
@@ -63,14 +75,14 @@
       <div class="paper shows-paper"><p class="eyebrow">Find us in the wild</p><p class="calendar-hint">Pick a marked date for the details.</p><div id="calendars" class="calendars"></div><div id="show-details" class="show-details" aria-live="polite"></div><div id="show-map" class="show-map"></div></div>
     </section>
     <footer class="section footer">
-      <div class="section-heading"><span class="section-number" aria-hidden="true">CQ /</span><h2>Follow the noise</h2></div>
+      <div class="section-heading"><span class="section-number" aria-hidden="true">CQ /</span><h2>Follow us into the darK</h2></div>
       <nav class="social-links" aria-label="Carrion Queen on social media">
         <a class="social-link instagram" href="https://instagram.com/queen.carri.one" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span>Instagram<small>@queen.carri.one</small></span><span class="external" aria-hidden="true">↗</span></a>
         <a class="social-link bluesky" href="https://bsky.app/profile/roadkill.gay" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 600 530" aria-hidden="true"><path d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-.0174-2.9357-1.1937.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/></svg><span>Bluesky<small>@roadkill.gay</small></span><span class="external" aria-hidden="true">↗</span></a>
         <a class="social-link youtube" href="https://www.youtube.com/@queencarrion" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 7s-.2-2-1-2.8C20.2 3.4 19.2 3.4 19 3.4 16.2 3.2 12 3.2 12 3.2s-4.2 0-7 .2c-.2 0-1.2 0-2 .8C2.2 5 2 7 2 7s-.2 2.3-.2 4.6v.8C1.8 14.7 2 17 2 17s.2 2 1 2.8c.8.8 1.9.8 2.4.9 1.8.2 6.6.2 6.6.2s4.2 0 7-.2c.2 0 1.2 0 2-.8.8-.8 1-2.8 1-2.8s.2-2.3.2-4.6v-.8C22.2 9.3 22 7 22 7z"/><path d="m10 8 6 4-6 4z" fill="#171816"/></svg><span>YouTube<small>@queencarrion</small></span><span class="external" aria-hidden="true">↗</span></a>
       </nav>
-      <div class="site-tools"><button id="motion-toggle" type="button" aria-pressed="false">Pause background</button><button id="install" type="button" hidden>Install the app ↗</button></div>
-      <p class="signoff">Made of teeth, tape & a little feedback.</p><p class="copyright">© <span id="year">2026</span> Carrion Queen</p>
+      <div class="site-tools"><button id="motion-toggle" type="button" aria-pressed="false">Pause background</button><button id="install" type="button" hidden>Save site to device ↗</button></div>
+      <p class="signoff">Therianizing radiation from beyond the veil.</p><p class="copyright">© <span id="year">2026</span> Carrion Queen</p>
     </footer>
   </main>
   <noscript><p class="noscript">Enable JavaScript for the music player and live calendar. <a href="./music/Headlight%20Halo%20Demo.mp3">Listen to Headlight Halo</a> · <a href="./music/The%20Knife%20Demo.mp3">Listen to The Knife</a> · <a href="./calendar.json">Show dates</a></p></noscript>

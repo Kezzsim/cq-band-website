@@ -18,3 +18,15 @@
 - `cq-fg.png` is a transparent image of a coyote, let's have it appear on the screen in the bottom right beneath other components but above the background video and then slide out of view to the left as the user scrolls down. Somewhat the opposite of what it was originally doing.
 - Let's use OpenStreetMap or something where we don't have API rate limiting problems to display the gig map.
 - SVGs should be single color, high contrast like white for things like the calendar, music player e.g.
+
+## Typography
+
+Example Google font reference block:
+
+```html
+<link href="https://fonts.googleapis.com/css2?family=Jolly+Lodger&family=Pirata+One&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+```
+
+- *UnifrakturCook* is for Titles, Headings e.g.
+- *Pirata One* is for the majority of body texts et. al.
+- *Jolly Lodger* is for flavor texts, callouts e.g.
