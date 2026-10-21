@@ -51,6 +51,8 @@ h1,h2,h3,
 .show-date{font-size:15px}
 .map-link,.map-switcher button,.social-link small,.site-tools button,.copyright{font-size:15px}
 @keyframes spin{to{transform:rotate(360deg)}}
+.symbol-definitions{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+svg.inline-symbol{display:inline-block;width:1em;height:1em;vertical-align:-.125em;fill:currentColor}
 /* Graphic marks stay monochrome, like ink on a photocopied show flyer. */
 .instagram>svg{fill:none}
 .cassette-label{background-image:linear-gradient(transparent 66%,var(--ink) 66%,var(--ink) 72%,transparent 72%,transparent 75%,var(--ink) 75%,var(--ink) 79%,transparent 79%,transparent 82%,var(--ink) 82%,var(--ink) 84%,transparent 84%)}

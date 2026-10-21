@@ -58,6 +58,15 @@ lazy-loaded OpenStreetMap embed. Multiple shows on one date are supported.
 
 ## Background assets
 
+To reuse the inline therian symbol in any paragraph, insert:
+
+```html
+<svg class="inline-symbol" role="img" aria-label="Therian" focusable="false"><use href="#therian-symbol"/></svg>
+```
+
+It inherits the surrounding text color and font size. Add an ordinary space
+after it when placing it before a word.
+
 The scenery fades in independently of the logo. In `style.css`, adjust
 `--coyote-right-inset` to move the coyote's right edge farther inside the screen,
 `--coyote-bottom-inset` for its bottom clearance, and `--scenery-fade-duration`

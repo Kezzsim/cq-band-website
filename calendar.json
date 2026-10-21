@@ -1,10 +1,11 @@
 {
     "events": [
         {
-            "title": "Luna Sage's 3rd Annual Halloween Backyard Bash",
+            "title": "Luna Sage's 3rd Annual Halloween BacKyard Bash",
             "date": "2026-10-24",
             "time": "4:00 PM EST",
-            "location": "40.6949904,-73.4062496"
+            "location": "40.6949904,-73.4062496",
+            "tickets": "https://www.instagram.com/p/DenJTUdy5Ap/"
         },
         {
             "title": "Furpocalypse: RocK 'n Roll Nightmare!",
