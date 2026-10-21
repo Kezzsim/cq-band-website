@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="430" height="270" viewBox="0 0 430 270">
+  <title>Photocopied label stripes</title>
+  <g id="label-stripes" fill="#20211c">
+    <path d="M27 158 135 157 252 159 403 157v12l-124-1-129 2-123-1Z"/>
+    <path d="m27 177 122-1 127 2 127-1v7l-116-1-147 2-113-1Z"/>
+    <path d="m27 192 99-1 159 2 118-1v4l-130-1-144 2-102-1Z"/>
+  </g>
+</svg>

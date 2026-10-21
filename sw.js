@@ -1,6 +1,6 @@
 'use strict';
 
-const VERSION = 'cq-v9';
+const VERSION = 'cq-v10';
 const SHELL = `${VERSION}-shell`;
 const DATA = `${VERSION}-data`;
 const APP_ROOT = new URL('./', self.location.href);
@@ -9,6 +9,10 @@ const SHELL_FILES = [
   './site.webmanifest', './favicon.ico', './favicon-96x96.png',
   './web-app-manifest-192x192.png', './web-app-manifest-512x512.png',
   './videobg/landscape.jpg', './videobg/portrait.jpg',
+  './cassette.css',
+  ...['shell', 'label', 'label-stripes', 'lettering', 'side-badge', 'tape-window',
+    'tape', 'reel-left', 'reel-right', 'lower-panel', 'guide-hole', 'screw']
+    .map((part) => `./assets/cassette/${part}.svg`),
 ];
 
 self.addEventListener('install', (event) => {

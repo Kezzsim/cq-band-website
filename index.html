@@ -30,6 +30,7 @@
   <link rel="manifest" href="./site.webmanifest">
   <link rel="preload" as="image" href="./Logo.webp" fetchpriority="high">
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./cassette.css">
   <script src="./script.js" defer></script>
 </head>
 <body>
@@ -61,13 +62,25 @@
       <div class="section-heading"><span class="section-number" aria-hidden="true">01 /</span><h2 id="bootlegs-title">Bootlegs</h2><span class="stamp">Hey, Listen!</span></div>
       <div class="paper player" id="player">
         <div class="player-topline"><span>First album out 03 / 18 / 2027, hope these will hold ya over</span><span id="track-counter">SIDE A</span></div>
-        <div class="cassette" aria-hidden="true">
-          <span class="screw screw-tl">+</span><span class="screw screw-tr">+</span>
-          <div class="cassette-label"><span class="cassette-brand">Carrion Queen</span><span class="cassette-side">A</span><span class="cassette-handwriting">Fourth leg records</span>
-            <div class="tape-window"><span class="reel"></span><span class="tape-bridge"></span><span class="reel"></span></div>
-            <div class="cassette-rule"></div><span class="cassette-spec">HIGH BIAS · C-90</span>
-          </div>
-          <div class="cassette-foot"><i></i><i></i><i></i><i></i></div><span class="screw screw-bl">+</span><span class="screw screw-br">+</span>
+        <div class="cassette-art" aria-hidden="true">
+          <img class="cassette-piece" src="./assets/cassette/shell.svg" alt="" width="430" height="270" loading="lazy" decoding="async">
+          <img class="cassette-piece" src="./assets/cassette/label.svg" alt="" width="430" height="270" loading="lazy" decoding="async">
+          <img class="cassette-piece" src="./assets/cassette/label-stripes.svg" alt="" width="430" height="270" loading="lazy" decoding="async">
+          <img class="cassette-piece" src="./assets/cassette/lettering.svg" alt="" width="430" height="270" loading="lazy" decoding="async">
+          <img class="cassette-piece" src="./assets/cassette/side-badge.svg" alt="" width="430" height="270" loading="lazy" decoding="async">
+          <img class="cassette-piece" src="./assets/cassette/tape-window.svg" alt="" width="430" height="270" loading="lazy" decoding="async">
+          <img class="cassette-piece" src="./assets/cassette/tape.svg" alt="" width="430" height="270" loading="lazy" decoding="async">
+          <img class="cassette-rotor cassette-rotor-left" src="./assets/cassette/reel-left.svg" alt="" width="64" height="64" loading="lazy" decoding="async">
+          <img class="cassette-rotor cassette-rotor-right" src="./assets/cassette/reel-right.svg" alt="" width="64" height="64" loading="lazy" decoding="async">
+          <img class="cassette-piece" src="./assets/cassette/lower-panel.svg" alt="" width="430" height="270" loading="lazy" decoding="async">
+          <img class="cassette-guide cassette-guide-one" src="./assets/cassette/guide-hole.svg" alt="" width="12" height="12" loading="lazy" decoding="async">
+          <img class="cassette-guide cassette-guide-two" src="./assets/cassette/guide-hole.svg" alt="" width="12" height="12" loading="lazy" decoding="async">
+          <img class="cassette-guide cassette-guide-three" src="./assets/cassette/guide-hole.svg" alt="" width="12" height="12" loading="lazy" decoding="async">
+          <img class="cassette-guide cassette-guide-four" src="./assets/cassette/guide-hole.svg" alt="" width="12" height="12" loading="lazy" decoding="async">
+          <img class="cassette-fastener cassette-fastener-top-left" src="./assets/cassette/screw.svg" alt="" width="12" height="12" loading="lazy" decoding="async">
+          <img class="cassette-fastener cassette-fastener-top-right" src="./assets/cassette/screw.svg" alt="" width="12" height="12" loading="lazy" decoding="async">
+          <img class="cassette-fastener cassette-fastener-bottom-left" src="./assets/cassette/screw.svg" alt="" width="12" height="12" loading="lazy" decoding="async">
+          <img class="cassette-fastener cassette-fastener-bottom-right" src="./assets/cassette/screw.svg" alt="" width="12" height="12" loading="lazy" decoding="async">
         </div>
         <div class="now-playing"><p class="eyebrow" id="playback-state">Press play</p><h3 id="track-title">Loading the tape…</h3><p id="track-credit">Carrion Queen</p><p class="track-tags" id="track-tags"></p></div>
         <div class="timeline"><label class="sr-only" for="seek">Track position</label><input id="seek" type="range" min="0" max="1000" value="0" disabled><div class="time-labels"><span id="elapsed">0:00</span><span id="duration">0:00</span></div></div>

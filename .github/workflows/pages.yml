@@ -32,6 +32,8 @@ jobs:
           mkdir _site
           cp index.html style.css script.js sw.js site.webmanifest calendar.json CNAME Logo.webp cq-fg.png favicon.ico favicon-96x96.png web-app-manifest-192x192.png web-app-manifest-512x512.png _site/
           cp gig-map.js _site/
+          cp cassette.css _site/
+          cp -R assets _site/assets
           cp -R music _site/music
           mkdir _site/videobg
           cp videobg/landscape.mp4 videobg/portrait.mp4 videobg/landscape.jpg videobg/portrait.jpg _site/videobg/

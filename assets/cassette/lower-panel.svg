@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="430" height="270" viewBox="0 0 430 270">
+  <title>Lower trapezoid panel</title>
+  <g id="lower-panel">
+    <path d="M111 237h208l17 30H94Z" fill="#20211c" stroke="#737565" stroke-width="2"/>
+    <path d="M114 242h202" fill="none" stroke="#dedac6" stroke-opacity=".15"/>
+  </g>
+</svg>

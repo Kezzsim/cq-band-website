@@ -18,6 +18,7 @@
 - `cq-fg.png` is a transparent image of a coyote, let's have it appear on the screen in the bottom right beneath other components but above the background video and then slide out of view to the left as the user scrolls down. Somewhat the opposite of what it was originally doing.
 - Let's use OpenStreetMap or something where we don't have API rate limiting problems to display the gig map.
 - SVGs should be single color, high contrast like white for things like the calendar, music player e.g.
+- Wherever possible, use either inline or discrete svg instead of generating bespoke collections of html shapes.
 
 ## Typography
 

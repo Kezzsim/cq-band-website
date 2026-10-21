@@ -67,6 +67,14 @@ not downloaded for offline use. See the [OSM tile usage policy](https://operatio
 
 ## Background assets
 
+### Editing the cassette
+
+Every visual cassette part is a discrete SVG in [`assets/cassette/`](assets/cassette/).
+Open these files directly in Affinity Designer or Inkscape. See the
+[artwork editing guide](assets/cassette/README.md) for layer dimensions,
+reel pivots, text-to-path export, and placement. `cassette.css` assembles the
+layers and rotates the reels in sync with playback.
+
 To reuse the inline therian symbol in any paragraph, insert:
 
 ```html

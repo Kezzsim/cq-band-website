@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="430" height="270" viewBox="0 0 430 270">
+  <title>Magnetic tape bridge</title>
+  <g id="tape" fill="#20211c">
+    <path d="M108 121h214v48H108Z" stroke="#dedac6" stroke-opacity=".3"/>
+    <path d="M108 125h214M108 165h214" fill="none" stroke="#dedac6" stroke-opacity=".35" stroke-width="2"/>
+    <path d="M108 133h214M108 157h214" fill="none" stroke="#dedac6" stroke-opacity=".1"/>
+  </g>
+</svg>

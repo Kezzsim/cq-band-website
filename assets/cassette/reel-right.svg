@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Right spinning reel — pivot at 32,32</title>
+  <g id="reel-right">
+    <circle cx="32" cy="32" r="30" fill="#dedac6" stroke="#737565" stroke-width="4"/>
+    <g id="spokes" fill="#20211c">
+      <path id="spoke" d="m29 6 6 0 2 16H27Z"/>
+      <use href="#spoke" transform="rotate(60 32 32)"/>
+      <use href="#spoke" transform="rotate(120 32 32)"/>
+      <use href="#spoke" transform="rotate(180 32 32)"/>
+      <use href="#spoke" transform="rotate(240 32 32)"/>
+      <use href="#spoke" transform="rotate(300 32 32)"/>
+      <circle cx="32" cy="32" r="10"/>
+    </g>
+    <circle cx="32" cy="32" r="12" fill="none" stroke="#737565"/>
+  </g>
+</svg>
