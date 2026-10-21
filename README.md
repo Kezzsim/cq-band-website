@@ -58,6 +58,13 @@ lazy-loaded OpenStreetMap embed. Multiple shows on one date are supported.
 
 ## Background assets
 
+The scenery fades in independently of the logo. In `style.css`, adjust
+`--coyote-right-inset` to move the coyote's right edge farther inside the screen,
+`--coyote-bottom-inset` for its bottom clearance, and `--scenery-fade-duration`
+for the entrance timing. Its size is constrained to fit the viewport initially;
+scrolling still sends it off to the left. Reduced-motion preferences disable
+the scenery entrance fades.
+
 `Logo.webp` is preloaded and runs independently of all scripts and data.
 It is already configured to play once. Keep this file mounted when editing
 the page so its animation is not restarted.

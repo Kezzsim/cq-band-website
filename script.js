@@ -16,6 +16,14 @@ addEventListener('scroll', () => {
 }, { passive: true });
 updateScroll();
 
+// Fade the coyote only once its pixels are ready, including cached-image loads.
+const coyote = $('.coyote');
+const revealCoyote = () => {
+  if (coyote.naturalWidth) $('.coyote-layer').classList.add('is-ready');
+};
+coyote.addEventListener('load', revealCoyote, { once: true });
+if (coyote.complete) revealCoyote();
+
 function setupBackground() {
   const videos = [...document.querySelectorAll('.background-video')];
   const portrait = matchMedia('(orientation: portrait)');

@@ -70,3 +70,64 @@ h1,h2,h3,
   .player-topline{font-size:12px;letter-spacing:.2px}
   .cassette-spec{font-size:8px}
 }
+
+/* Reserve the logo's actual aspect-ratio height at every intermediate width. */
+.masthead{height:auto;min-height:0;margin-bottom:0;padding-bottom:24px}
+.masthead h1{width:min(680px,94vw);flex:none}
+.logo{aspect-ratio:1000 / 563}
+@media(min-width:541px) and (max-width:999px){
+  .masthead{padding-bottom:32px}
+}
+@media(max-height:540px) and (orientation:landscape){
+  .masthead{margin-top:16px;padding-bottom:20px}
+  .masthead h1{width:min(680px,94vw,90svh)}
+}
+
+:root{
+  /* Increase this inset to move the coyote's rightmost edge farther left. */
+  --coyote-right-inset:clamp(12px,2vw,32px);
+  --coyote-bottom-inset:12px;
+  --coyote-width:35vw;
+  --scenery-fade-duration:3s;
+}
+.backdrop{animation:scenery-in var(--scenery-fade-duration) ease-out .12s both}
+/* A separate opacity layer keeps the entrance fade independent of scrolling. */
+.coyote-layer{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0}
+.coyote-layer.is-ready{animation:scenery-in var(--scenery-fade-duration) ease-out .25s both}
+.coyote{
+  --right-bound:clamp(0px,var(--coyote-right-inset),40vw);
+  --bottom-bound:max(0px,var(--coyote-bottom-inset));
+  right:max(var(--right-bound),env(safe-area-inset-right));
+  bottom:max(var(--bottom-bound),env(safe-area-inset-bottom));
+  width:min(var(--coyote-width),450px,calc(100vw - max(var(--right-bound),env(safe-area-inset-right)) - 12px),calc((100svh - max(var(--bottom-bound),env(safe-area-inset-bottom)) - 12px) * 675 / 794));
+  height:auto;
+  z-index:auto;
+}
+@media(max-width:540px){:root{--coyote-width:54vw}}
+@keyframes scenery-in{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  .backdrop,.coyote-layer.is-ready{animation:none;opacity:1}
+}
+
+/* Leave a full opening scene on phones and narrow portrait tablets. The intro
+   supplies the invisible space, so the first section starts below the fold. */
+@media(max-width:767px),(max-width:999px) and (orientation:portrait){
+  :root{
+    --opening-logo-width:min(680px,94vw);
+    --opening-top-space:30px;
+    --opening-logo-gap:32px;
+  }
+  .intro{
+    min-height:calc(100svh - var(--opening-top-space) - var(--opening-logo-width) * 563 / 1000 - var(--opening-logo-gap));
+  }
+}
+@media(max-width:540px){
+  :root{--opening-top-space:22px;--opening-logo-gap:24px}
+}
+@media(max-width:767px) and (max-height:540px) and (orientation:landscape){
+  :root{
+    --opening-logo-width:min(680px,94vw,90svh);
+    --opening-top-space:16px;
+    --opening-logo-gap:20px;
+  }
+}
