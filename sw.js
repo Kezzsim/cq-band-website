@@ -1,6 +1,6 @@
 'use strict';
 
-const VERSION = 'cq-v11';
+const VERSION = 'cq-v12';
 const SHELL = `${VERSION}-shell`;
 const DATA = `${VERSION}-data`;
 const APP_ROOT = new URL('./', self.location.href);

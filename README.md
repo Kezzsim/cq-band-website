@@ -116,6 +116,47 @@ ffmpeg -i videobg/portrait.mp4 -frames:v 1 -q:v 4 videobg/portrait.jpg
 
 ## Publish / offline behavior
 
+### Social link previews
+
+Social crawlers read metadata directly from `index.html` without running
+JavaScript. The Pages workflow must publish `images/` alongside the page:
+
+- `images/og-image.jpg`: 1120 × 630 JPEG for Open Graph clients, including
+  Facebook, Bluesky, LinkedIn, Discord, Slack, and messaging link previews.
+- `images/twitter-image.jpg`: 1200 × 675 JPEG for X/Twitter's large image card.
+
+Both images are below 1 MB and use absolute HTTPS URLs. Alt text, Open Graph
+dimensions/type, and the canonical URL are declared in the document head.
+Platforms control the final crop/layout; some clients may choose a small card.
+
+The workflow checks metadata and image files in the actual `_site` artifact
+before publishing. Run the same check locally:
+
+```sh
+python3 scripts/check-social-previews.py
+```
+
+After deployment, verify actual HTTP responses, MIME types, and image content:
+
+```sh
+python3 scripts/check-social-previews.py https://queen.carri.one/
+```
+
+To confirm Bluesky's public card extractor sees the card, open
+<https://cardyb.bsky.app/v1/extract?url=https%3A%2F%2Fqueen.carri.one%2F>
+and check its `image` URL also returns an image. Then paste the site URL into
+a new Bluesky post and wait for the preview before posting. Existing Bluesky
+posts contain their original embed and will not be repaired retroactively.
+
+Social platforms cache previous fetches, including missing images. After
+deployment, request another scrape with [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)
+and [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/).
+For other platforms, compose a new share after their cache refreshes; a fresh
+page query such as `?share=2` can help trigger a new page fetch, though image
+caching and preview support remain platform-specific. When replacing artwork,
+use a new image filename and update the corresponding metadata to invalidate
+cached images.
+
 Choose **GitHub Actions** as the Pages source in repository settings. The
 included workflow generates the playlist and uploads just the serving assets,
 excluding the large video masters. Relative asset paths also support a Pages
