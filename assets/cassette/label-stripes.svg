@@ -1,8 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="430" height="270" viewBox="0 0 430 270">
-  <title>Photocopied label stripes</title>
-  <g id="label-stripes" fill="#20211c">
-    <path d="M27 158 135 157 252 159 403 157v12l-124-1-129 2-123-1Z"/>
-    <path d="m27 177 122-1 127 2 127-1v7l-116-1-147 2-113-1Z"/>
-    <path d="m27 192 99-1 159 2 118-1v4l-130-1-144 2-102-1Z"/>
-  </g>
-</svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="100%" height="100%" viewBox="0 0 1792 1125" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="label-stripes"><path d="M112.5,658.333l450,-4.166l487.5,8.333l629.167,-8.333l-0,50l-516.667,-4.167l-537.5,8.333l-512.5,-4.166l0,-45.834Z" style="fill:#cf2c00;fill-rule:nonzero;"/><path d="M112.5,737.5l508.333,-4.167l529.167,8.334l529.167,-4.167l-0,29.167l-483.334,-4.167l-612.5,8.333l-470.833,-4.166l0,-29.167Z" style="fill:#cd5fa0;fill-rule:nonzero;"/><path d="M112.5,800l412.5,-4.167l662.5,8.334l491.667,-4.167l-0,16.667l-541.667,-4.167l-600,8.333l-425,-4.166l0,-16.667Z" style="fill:#9d035f;fill-rule:nonzero;"/></g></svg>
