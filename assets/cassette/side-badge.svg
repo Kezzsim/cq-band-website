@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="430" height="270" viewBox="0 0 430 270">
+  <title>Side A badge</title>
+  <g id="side-badge" fill="#20211c">
+    <path d="M375 32h17v20h-17Z" fill="none" stroke="#20211c"/>
+    <text x="383.5" y="48" text-anchor="middle" font-family="Pirata One, serif" font-size="17">A</text>
+  </g>
+</svg>

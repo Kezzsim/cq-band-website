@@ -1,0 +1,49 @@
+[
+  {
+    "src": "./music/Headlight%20Halo%20Demo.mp3",
+    "file": "Headlight Halo Demo.mp3",
+    "title": "Headlight Halo",
+    "artist": "Carrion Queen",
+    "album": "Headlight Halo",
+    "year": "2026",
+    "genre": "Folk Punk",
+    "composer": "Carrie Barry",
+    "duration": 245.79,
+    "tags": {
+      "date": "2026",
+      "track": "1/16",
+      "title": "Headlight Halo",
+      "composer": "Carrie Barry",
+      "toly": "Carrie Barry",
+      "artist": "Carrion Queen",
+      "publisher": "Left for life records",
+      "genre": "Folk Punk",
+      "tkey": "Am",
+      "tbpm": "105",
+      "album": "Headlight Halo",
+      "album_artist": "Carrion Queen"
+    }
+  },
+  {
+    "src": "./music/The%20Knife%20Demo.mp3",
+    "file": "The Knife Demo.mp3",
+    "title": "The Knife",
+    "artist": "Carrion Queen",
+    "album": "Imagine being happy",
+    "year": "2026",
+    "genre": "Folk Punk",
+    "composer": "Carrie Barry",
+    "duration": 167.57,
+    "tags": {
+      "date": "2026",
+      "track": "1/11",
+      "title": "The Knife",
+      "album": "Imagine being happy",
+      "composer": "Carrie Barry",
+      "artist": "Carrion Queen",
+      "tkey": "E",
+      "tbpm": "96",
+      "genre": "Folk Punk"
+    }
+  }
+]

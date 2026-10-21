@@ -1,0 +1,45 @@
+name: Publish band website
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install media metadata reader
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Generate playlist from MP3 tags
+        run: python3 scripts/generate-playlist.py
+      - uses: actions/configure-pages@v5
+      - name: Assemble static site
+        run: |
+          mkdir _site
+          cp index.html style.css script.js sw.js site.webmanifest calendar.json CNAME Logo.webp cq-fg.png favicon.ico favicon-96x96.png web-app-manifest-192x192.png web-app-manifest-512x512.png _site/
+          cp gig-map.js _site/
+          cp cassette.css _site/
+          cp -R assets _site/assets
+          cp -R music _site/music
+          mkdir _site/videobg
+          cp videobg/landscape.mp4 videobg/portrait.mp4 videobg/landscape.jpg videobg/portrait.jpg _site/videobg/
+          touch _site/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - uses: actions/deploy-pages@v4
+        id: deployment

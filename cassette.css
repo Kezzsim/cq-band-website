@@ -1,0 +1,43 @@
+/* Artwork lives in assets/cassette/. CSS only assembles and animates it.
+   Full-size layers share a 430 × 270 canvas; coordinates below use that grid. */
+.cassette-art {
+  position: relative;
+  width: 100%;
+  max-width: 430px;
+  aspect-ratio: 430 / 270;
+  margin: 30px auto 26px;
+  transform: rotate(-3deg);
+  filter: drop-shadow(3px 6px 0 #0002);
+}
+.cassette-art img {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+.cassette-piece { inset: 0; width: 100%; height: 100%; }
+.cassette-rotor {
+  top: calc(113 / 270 * 100%);
+  width: calc(64 / 430 * 100%);
+  height: calc(64 / 270 * 100%);
+  transform-origin: 50% 50%;
+  animation: cassette-spin 3s linear infinite;
+  animation-play-state: paused;
+}
+.cassette-rotor-left { left: calc(76 / 430 * 100%); }
+.cassette-rotor-right { left: calc(290 / 430 * 100%); }
+.is-playing .cassette-rotor { animation-play-state: running; }
+.cassette-fastener { width: calc(12 / 430 * 100%); height: calc(12 / 270 * 100%); }
+.cassette-fastener-top-left { left: calc(6 / 430 * 100%); top: calc(6 / 270 * 100%); }
+.cassette-fastener-top-right { right: calc(6 / 430 * 100%); top: calc(6 / 270 * 100%); }
+.cassette-fastener-bottom-left { left: calc(6 / 430 * 100%); bottom: calc(6 / 270 * 100%); }
+.cassette-fastener-bottom-right { right: calc(6 / 430 * 100%); bottom: calc(6 / 270 * 100%); }
+.cassette-guide { top: calc(247 / 270 * 100%); width: calc(12 / 430 * 100%); height: calc(12 / 270 * 100%); }
+.cassette-guide-one { left: calc(119 / 430 * 100%); }
+.cassette-guide-two { left: calc(174 / 430 * 100%); }
+.cassette-guide-three { left: calc(244 / 430 * 100%); }
+.cassette-guide-four { left: calc(299 / 430 * 100%); }
+@keyframes cassette-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .cassette-rotor { animation: none; }
+}
