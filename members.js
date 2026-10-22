@@ -33,12 +33,31 @@ export async function setupMembers() {
   const asset = (path) => `./${String(path).replace(/^\.?\//, '')}`;
   const previewButtons = [$('#member-previous-card'), $('#member-next-card')];
   const navigators = [$('#member-previous'), $('#member-next'), ...previewButtons];
+  const failedImages = new Set();
+
+  function setCardImage(image, sources) {
+    const candidates = [...new Set(sources.filter(Boolean).map(asset))];
+    const next = () => {
+      const source = candidates.find((candidate) => !failedImages.has(candidate));
+      if (!source) {
+        image.onerror = null;
+        image.removeAttribute('src');
+        image.classList.add('member-image-unavailable');
+        return;
+      }
+      image.classList.remove('member-image-unavailable');
+      image.onerror = () => { failedImages.add(source); next(); };
+      if (image.getAttribute('src') !== source) image.src = source;
+    };
+    next();
+  }
 
   function preview(button, member) {
     const image = button.querySelector('img');
     const still = motion.matches || navigator.connection?.saveData || document.hidden || !inView;
-    const source = still ? member.card_back_still || member.card_front : member.card_back || member.card_front;
-    image.src = asset(source);
+    setCardImage(image, still
+      ? [member.card_back_still, member.card_front]
+      : [member.card_back, member.card_back_still, member.card_front]);
     button.setAttribute('aria-label', `Select ${member.Name}`);
     button.querySelector('.member-preview-name').textContent = member.Name;
   }
@@ -49,13 +68,31 @@ export async function setupMembers() {
   function select(index, animate = true) {
     current = wrap(index);
     const member = members[current];
-    $('#member-front').src = asset(member.card_front);
+    setCardImage($('#member-front'), [member.card_front, member.card_back_still]);
     $('#member-front').alt = `${member.Name} — ${member.Species || 'Carrion Queen member'} portrait`;
     $('.member-active').setAttribute('aria-label', `${current + 1} of ${members.length}: ${member.Name}`);
     $('#member-counter').textContent = `${String(current + 1).padStart(2, '0')} / ${String(members.length).padStart(2, '0')}`;
     $('#member-name').textContent = member.Name;
     $('#member-instruments').textContent = (member.Instruments || []).join(' / ');
-    $('#member-identity').textContent = [member.Pronouns, member.Species, member.Place].filter(Boolean).join(' · ');
+    const identity = $('#member-identity');
+    identity.replaceChildren();
+    [['Pronouns', 'pronouns'], ['Species', 'species'], ['Place', 'place']].forEach(([field, icon]) => {
+      if (!member[field]) return;
+      const item = document.createElement('div');
+      item.className = 'member-field';
+      item.title = field;
+      const term = document.createElement('dt');
+      const symbol = document.createElement('img');
+      symbol.src = `./assets/member-fields/${icon}.svg`;
+      symbol.alt = ''; symbol.width = 20; symbol.height = 20;
+      const label = document.createElement('span');
+      label.className = 'sr-only'; label.textContent = field;
+      term.append(symbol, label);
+      const value = document.createElement('dd');
+      value.textContent = member[field];
+      item.append(term, value);
+      identity.append(item);
+    });
     const bio = $('#member-bio');
     bio.replaceChildren();
     // Support the simple *emphasis* used in the data without interpreting HTML.

@@ -1,6 +1,6 @@
 'use strict';
 
-const VERSION = 'cq-v13';
+const VERSION = 'cq-v14';
 const SHELL = `${VERSION}-shell`;
 const DATA = `${VERSION}-data`;
 const APP_ROOT = new URL('./', self.location.href);
@@ -11,6 +11,7 @@ const SHELL_FILES = [
   './videobg/landscape.jpg', './videobg/portrait.jpg',
   './cassette.css',
   './members.css', './members.js',
+  ...['pronouns', 'species', 'place'].map((field) => `./assets/member-fields/${field}.svg`),
   ...['shell', 'label', 'label-stripes', 'lettering', 'side-badge', 'tape-window',
     'tape', 'reel-left', 'reel-right', 'lower-panel', 'guide-hole', 'screw']
     .map((part) => `./assets/cassette/${part}.svg`),

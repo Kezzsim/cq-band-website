@@ -84,8 +84,10 @@ are also available in `members.js`; unknown platforms use a website icon.
 media load near the section. Reduced-motion, data-saving, hidden-tab, and
 offscreen states use `card_back_still` fallbacks instead of animated backs.
 
-The original QuickTime/ProRes files remain in `images/members/backs/*Raw.mov`
-for editing. Rebuild the serving assets with:
+The QuickTime/ProRes `*Raw.mov` files are optional conversion inputs. They can
+be deleted or stored outside the website once the WebPs have been generated;
+neither the browser nor the Pages build reads them. Keep the generated
+`.webp` and `-still.webp` files. Rebuild animations for any raw files present:
 
 ```sh
 python3 scripts/encode-member-cards.py
@@ -94,7 +96,16 @@ python3 scripts/encode-member-cards.py
 This requires FFmpeg and Pillow. It generates 480 × 480, 12fps, infinitely
 looping WebPs plus still WebP fallbacks. The Pages workflow publishes JPEGs
 and WebPs, excluding the large raw movie masters. Add new source mappings to
-the encoder script when introducing new members.
+the encoder script when introducing new members. Missing raw inputs are
+skipped without changing existing images. To use an external source folder:
+
+```sh
+python3 scripts/encode-member-cards.py --source-dir "/path/to/card masters"
+```
+
+If a back image cannot load, the carousel falls back to its still image and
+then the front portrait. Pronouns, species, and place use labeled icon fields;
+their editable vector icons are in `assets/member-fields/`.
 
 ## Background assets
 

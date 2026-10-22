@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Create looping member WebPs and still fallbacks from the ProRes masters.
 
-Requires FFmpeg and Pillow. Raw masters are retained locally, not published.
+Requires FFmpeg and Pillow. Raw masters are optional and never published.
 """
+import argparse
 from pathlib import Path
 import subprocess
 from PIL import Image
@@ -12,10 +13,18 @@ BACKS = ROOT / "images/members/backs"
 SOURCES = {"Carrie": "CarrieRaw.mov", "Nikki": "NikkieRaw.mov",
            "Spike": "SpikeRaw.mov", "Luna": "LunaRaw.mov"}
 SIZE, FPS = 480, 12
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--source-dir", type=Path, default=BACKS,
+                    help="Folder containing optional raw movies (can be outside the site)")
+args = parser.parse_args()
 
 for name, source in SOURCES.items():
+    source_path = args.source_dir / source
+    if not source_path.is_file():
+        print(f"{name}: no raw source; keeping existing WebP files unchanged")
+        continue
     process = subprocess.Popen([
-        "ffmpeg", "-v", "error", "-i", str(BACKS / source), "-an",
+        "ffmpeg", "-v", "error", "-i", str(source_path), "-an",
         "-vf", f"fps={FPS},scale={SIZE}:{SIZE}",
         "-f", "rawvideo", "-pix_fmt", "rgb24", "pipe:1",
     ], stdout=subprocess.PIPE)
