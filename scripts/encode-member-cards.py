@@ -1,48 +1,65 @@
 #!/usr/bin/env python3
-"""Create looping member WebPs and still fallbacks from the ProRes masters.
+"""One-off movie → WebP conversion. Never run by deployment.
 
-Requires FFmpeg and Pillow. Raw masters are optional and never published.
+python3 scripts/encode-member-cards.py input.mov output.webp
+python3 scripts/encode-member-cards.py input.mov still.webp --still
+Requires FFmpeg and Pillow. Writes only the explicitly named output file.
 """
 import argparse
 from pathlib import Path
 import subprocess
 from PIL import Image
 
-ROOT = Path(__file__).resolve().parent.parent
-BACKS = ROOT / "images/members/backs"
-SOURCES = {"Carrie": "CarrieRaw.mov", "Nikki": "NikkieRaw.mov",
-           "Spike": "SpikeRaw.mov", "Luna": "LunaRaw.mov"}
-SIZE, FPS = 480, 12
-parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument("--source-dir", type=Path, default=BACKS,
-                    help="Folder containing optional raw movies (can be outside the site)")
-args = parser.parse_args()
 
-for name, source in SOURCES.items():
-    source_path = args.source_dir / source
-    if not source_path.is_file():
-        print(f"{name}: no raw source; keeping existing WebP files unchanged")
-        continue
-    process = subprocess.Popen([
-        "ffmpeg", "-v", "error", "-i", str(source_path), "-an",
-        "-vf", f"fps={FPS},scale={SIZE}:{SIZE}",
-        "-f", "rawvideo", "-pix_fmt", "rgb24", "pipe:1",
-    ], stdout=subprocess.PIPE)
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("input", type=Path)
+    parser.add_argument("output", type=Path)
+    parser.add_argument("--still", action="store_true", help="Export just the first frame")
+    args = parser.parse_args()
+    if not args.input.is_file():
+        parser.error(f"Input does not exist: {args.input}")
+    if args.output.suffix.lower() != ".webp":
+        parser.error("Output must be a .webp file")
+    if not args.output.parent.is_dir():
+        parser.error("Output directory must already exist")
+    if args.input.resolve() == args.output.resolve():
+        parser.error("Input and output must be different files")
+
+    size, fps = 480, 12
+    filters = f"scale={size}:{size}" if args.still else f"fps={fps},scale={size}:{size}"
+    command = ["ffmpeg", "-v", "error", "-i", str(args.input), "-an", "-vf", filters]
+    if args.still:
+        command += ["-frames:v", "1"]
+    command += ["-f", "rawvideo", "-pix_fmt", "rgb24", "pipe:1"]
+    process = subprocess.Popen(command, stdout=subprocess.PIPE)
     frames = []
-    while True:
-        data = process.stdout.read(SIZE * SIZE * 3)
-        if not data:
-            break
-        if len(data) != SIZE * SIZE * 3:
-            raise RuntimeError(f"Incomplete frame in {source}")
-        frames.append(Image.frombytes("RGB", (SIZE, SIZE), data))
-    if process.wait() or not frames:
-        raise RuntimeError(f"Could not decode {source}")
-    frames[0].save(BACKS / f"{name}-still.webp", quality=80, method=6)
-    # Alternating 83/84ms durations preserve the 12fps timeline.
-    durations = [round((i + 1) * 1000 / FPS) - round(i * 1000 / FPS)
-                 for i in range(len(frames))]
-    frames[0].save(BACKS / f"{name}.webp", save_all=True,
-                   append_images=frames[1:], duration=durations,
-                   loop=0, quality=65, method=4, minimize_size=True)
-    print(f"{name}: {len(frames)} frames, {(BACKS / f'{name}.webp').stat().st_size:,} bytes")
+    try:
+        while True:
+            data = process.stdout.read(size * size * 3)
+            if not data:
+                break
+            if len(data) != size * size * 3:
+                raise RuntimeError("Incomplete decoded frame")
+            frames.append(Image.frombytes("RGB", (size, size), data))
+        if process.wait() or not frames:
+            raise RuntimeError(f"Could not decode {args.input}")
+    finally:
+        process.stdout.close()
+        if process.poll() is None:
+            process.kill()
+            process.wait()
+
+    if args.still:
+        frames[0].save(args.output, quality=80, method=6)
+    else:
+        durations = [round((i + 1) * 1000 / fps) - round(i * 1000 / fps)
+                     for i in range(len(frames))]
+        frames[0].save(args.output, save_all=True, append_images=frames[1:],
+                       duration=durations, loop=0, quality=65, method=4,
+                       minimize_size=True)
+    print(f"Created {args.output}: {len(frames)} frames, {args.output.stat().st_size:,} bytes")
+
+
+if __name__ == "__main__":
+    main()

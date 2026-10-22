@@ -416,5 +416,5 @@ $('#install').addEventListener('click', async () => {
 });
 addEventListener('appinstalled', () => { $('#install').hidden = true; installPrompt = null; });
 if ('serviceWorker' in navigator) addEventListener('load', () => {
-  navigator.serviceWorker.register('./sw.js').catch((error) => console.warn('Offline support unavailable:', error));
+  navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).catch((error) => console.warn('Offline support unavailable:', error));
 });

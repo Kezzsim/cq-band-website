@@ -84,24 +84,29 @@ are also available in `members.js`; unknown platforms use a website icon.
 media load near the section. Reduced-motion, data-saving, hidden-tab, and
 offscreen states use `card_back_still` fallbacks instead of animated backs.
 
-The QuickTime/ProRes `*Raw.mov` files are optional conversion inputs. They can
-be deleted or stored outside the website once the WebPs have been generated;
-neither the browser nor the Pages build reads them. Keep the generated
-`.webp` and `-still.webp` files. Rebuild animations for any raw files present:
+The website and Pages deployment use **only checked-in JPEG/WebP assets**.
+Raw movies are disposable, optional inputs to a manual one-off utility. No
+deployment step converts member movies or requires them to exist. Keep the
+generated `.webp` and `-still.webp` files and reference them in `members.json`.
+
+To convert one movie into one looping WebP, run locally:
 
 ```sh
-python3 scripts/encode-member-cards.py
+python3 scripts/encode-member-cards.py "/path/to/Nikki.mov" images/members/backs/Nikki.webp
 ```
 
-This requires FFmpeg and Pillow. It generates 480 × 480, 12fps, infinitely
-looping WebPs plus still WebP fallbacks. The Pages workflow publishes JPEGs
-and WebPs, excluding the large raw movie masters. Add new source mappings to
-the encoder script when introducing new members. Missing raw inputs are
-skipped without changing existing images. To use an external source folder:
+This requires FFmpeg and Pillow and writes only the named output: 480 × 480,
+12fps, infinitely looping WebP. To create one still fallback, invoke separately:
 
 ```sh
-python3 scripts/encode-member-cards.py --source-dir "/path/to/card masters"
+python3 scripts/encode-member-cards.py "/path/to/Nikki.mov" images/members/backs/Nikki-still.webp --still
 ```
+
+There are no hardcoded member names or source folders in the converter. It
+is never called by GitHub Actions. Archive/delete the input movie whenever
+you like; add the finished WebP files to version control. The Pages workflow
+validates all JSON-referenced assets and rejects published raw movies with
+`scripts/check-member-assets.py _site` (validation only, no generation).
 
 If a back image cannot load, the carousel falls back to its still image and
 then the front portrait. Pronouns, species, and place use labeled icon fields;
@@ -211,4 +216,7 @@ range requests rather than being eagerly cached. Maps need a connection.
 Fonts fall back to system fonts when Google Fonts is unavailable.
 
 When deploying code changes, increment `VERSION` in `sw.js` to invalidate the
-shell cache. An update activates after existing site tabs close.
+shell cache. Completed updates activate immediately. HTML, scripts, styles,
+and JSON use network-first fetching with an offline cache fallback so a fresh
+page does not keep using obsolete initialization code. Returning visitors
+with a pre-fix service worker may need one reload after the update activates.

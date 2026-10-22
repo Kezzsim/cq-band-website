@@ -1,6 +1,6 @@
 'use strict';
 
-const VERSION = 'cq-v14';
+const VERSION = 'cq-v15';
 const SHELL = `${VERSION}-shell`;
 const DATA = `${VERSION}-data`;
 const APP_ROOT = new URL('./', self.location.href);
@@ -18,7 +18,7 @@ const SHELL_FILES = [
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(SHELL).then((cache) => cache.addAll(SHELL_FILES)));
+  event.waitUntil(caches.open(SHELL).then((cache) => cache.addAll(SHELL_FILES)).then(() => self.skipWaiting()));
 });
 self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
@@ -34,17 +34,19 @@ self.addEventListener('fetch', (event) => {
   // Let the browser handle media range requests natively; never cache partial files
   // or fetch entire videos/MP3s just to populate the offline cache.
   if (request.headers.has('range') || /\.(mp3|mp4)$/i.test(url.pathname)) return;
-  if (/\.(json|webmanifest)$/.test(url.pathname) || request.mode === 'navigate') {
+  // HTML and its code must refresh together. Cache-first code with network-first
+  // HTML left returning visitors with new markup and an obsolete initializer.
+  if (/\.(html|js|css|json|webmanifest)$/.test(url.pathname) || request.mode === 'navigate') {
     event.respondWith((async () => {
       try {
         const response = await fetch(request);
-        if (response.ok) {
-          const cache = await caches.open(DATA);
-          await cache.put(request, response.clone());
-        }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const cache = await caches.open(DATA);
+        await cache.put(request, response.clone());
         return response;
       } catch {
-        return await caches.match(request) || (request.mode === 'navigate' ? await caches.match(new URL('./index.html', APP_ROOT)) : null) || Response.error();
+        const data = await caches.open(DATA);
+        return await data.match(request) || await caches.match(request) || (request.mode === 'navigate' ? await caches.match(new URL('./index.html', APP_ROOT)) : null) || Response.error();
       }
     })());
     return;

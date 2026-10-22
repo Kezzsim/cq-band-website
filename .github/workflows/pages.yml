@@ -45,6 +45,8 @@ jobs:
           touch _site/.nojekyll
       - name: Verify social preview metadata and published images
         run: python3 scripts/check-social-previews.py _site
+      - name: Verify ready-to-serve member assets (no conversion)
+        run: python3 scripts/check-member-assets.py _site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
