@@ -394,6 +394,17 @@ if ('IntersectionObserver' in window) {
 } else setupCalendar();
 
 let installPrompt;
+// Load profile data and card images only as the members section approaches.
+const loadMembers = () => import('./members.js').then(({ setupMembers }) => setupMembers()).catch(() => {
+  $('#member-status').textContent = 'Member profiles are unavailable. Please try again later.';
+});
+if ('IntersectionObserver' in window) {
+  const memberObserver = new IntersectionObserver((entries) => {
+    if (entries.some((entry) => entry.isIntersecting)) { memberObserver.disconnect(); loadMembers(); }
+  }, { rootMargin: '300px' });
+  memberObserver.observe($('#members'));
+} else loadMembers();
+
 addEventListener('beforeinstallprompt', (event) => {
   event.preventDefault(); installPrompt = event; $('#install').hidden = false;
 });

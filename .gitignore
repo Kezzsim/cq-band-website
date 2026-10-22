@@ -6,3 +6,6 @@ raw_images/
 *.log
 node_modules/
 .env
+
+# Optional member animation source masters; only generated WebPs are deployed.
+images/members/backs/*.[mM][oO][vV]

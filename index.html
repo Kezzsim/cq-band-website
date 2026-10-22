@@ -39,6 +39,7 @@
   <link rel="preload" as="image" href="./Logo.webp" fetchpriority="high">
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="./cassette.css">
+  <link rel="stylesheet" href="./members.css">
   <script src="./script.js" defer></script>
 </head>
 <body>
@@ -104,8 +105,31 @@
         <audio id="audio" preload="none"></audio>
       </div>
     </section>
+    <section id="members" class="section members-section" aria-labelledby="members-title">
+      <div class="section-heading"><span class="section-number" aria-hidden="true">02 /</span><h2 id="members-title">Members</h2><span class="members-flavor">Meet the creatures</span></div>
+      <div class="members-carousel" role="region" aria-roledescription="carousel" aria-label="Band members" tabindex="0">
+        <div class="members-topline"><span>The unusual suspects</span><span id="member-counter"></span></div>
+        <div class="member-stage">
+          <button class="member-preview member-preview-left" id="member-previous-card" type="button" aria-label="Previous member" disabled><img alt="" width="480" height="480" decoding="async"><span class="member-preview-name"></span></button>
+          <div class="member-active" role="group" aria-roledescription="slide" aria-label="Member profile">
+            <div class="member-portrait"><img id="member-front" alt="" width="900" height="900" decoding="async"></div>
+            <span class="callout" id="member-callout" hidden></span>
+          </div>
+          <button class="member-preview member-preview-right" id="member-next-card" type="button" aria-label="Next member" disabled><img alt="" width="480" height="480" decoding="async"><span class="member-preview-name"></span></button>
+        </div>
+        <div class="member-switchboard">
+          <button class="member-arrow member-arrow-left" id="member-previous" type="button" aria-label="Previous member" disabled><svg viewBox="0 0 40 40" aria-hidden="true"><path d="m25 5-19 15 19 15-5-13h14v-5H20Z"/></svg></button>
+          <div class="member-readout" aria-live="polite" aria-atomic="true"><p class="eyebrow" id="member-instruments"></p><h3 id="member-name">Getting the band together…</h3><dl class="member-identity" id="member-identity"></dl></div>
+          <button class="member-arrow member-arrow-right" id="member-next" type="button" aria-label="Next member" disabled><svg viewBox="0 0 40 40" aria-hidden="true"><path d="m15 5 19 15-19 15 5-13H6v-5h14Z"/></svg></button>
+        </div>
+        <p class="member-bio" id="member-bio"></p>
+        <nav class="member-socials" id="member-socials" aria-label="Selected member’s social links"></nav>
+        <div class="member-pagination" id="member-pagination" aria-label="Choose a band member"></div>
+        <p class="member-status" id="member-status" role="status"></p>
+      </div>
+    </section>
     <section id="shows" class="section" aria-labelledby="shows-title" hidden>
-      <div class="section-heading"><span class="section-number" aria-hidden="true">02 /</span><h2 id="shows-title">Upcoming shows</h2></div>
+      <div class="section-heading"><span class="section-number" aria-hidden="true">03 /</span><h2 id="shows-title">Upcoming shows</h2></div>
       <div class="paper shows-paper"><p class="eyebrow">Find us in the wild</p><div id="calendars" class="calendars"></div><div id="show-details" class="show-details" aria-live="polite"></div><div id="show-map" class="show-map"></div></div>
     </section>
     <footer class="section footer">
