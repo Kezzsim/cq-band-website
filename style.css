@@ -102,7 +102,7 @@ svg.inline-symbol{display:inline-block;width:1em;height:1em;vertical-align:-.125
   --coyote-right-inset:clamp(12px,2vw,32px);
   --coyote-bottom-inset:12px;
   --coyote-width:35vw;
-  --scenery-fade-duration:3s;
+  --scenery-fade-duration:6s;
 }
 .backdrop{animation:scenery-in var(--scenery-fade-duration) ease-out .12s both}
 /* A separate opacity layer keeps the entrance fade independent of scrolling. */

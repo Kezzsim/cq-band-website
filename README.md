@@ -65,6 +65,37 @@ from unpkg with integrity checks; if unavailable, the direct OSM link remains.
 Only visible maps request tiles; browser caching is preserved and tiles are
 not downloaded for offline use. See the [OSM tile usage policy](https://operations.osmfoundation.org/policies/tiles/).
 
+## Member profiles
+
+The **Members** carousel sits between Bootlegs and Upcoming shows. Edit
+`members.json` to update names, instruments, pronouns, species, hometowns,
+biographies, `Phrases`, social links, and card image paths. `*Emphasis*` in a bio
+is supported as text formatting; HTML is not interpreted.
+
+The selected member uses `card_front` (a static JPEG); neighboring cards show
+looping `card_back` WebPs. Every selection draws a random speech-bubble phrase,
+avoiding the last phrase used for that member when there are alternatives.
+Navigate with the angular arrows, side cards, numbered selectors, or keyboard
+left/right arrows. Social links use labeled SVG icon buttons; current data uses
+Instagram, Bluesky, and Website. YouTube, TikTok, Bandcamp, and Spotify icons
+are also available in `members.js`; unknown platforms use a website icon.
+
+`members.css` controls the carousel styling and speech-bubble shape. Data and
+media load near the section. Reduced-motion, data-saving, hidden-tab, and
+offscreen states use `card_back_still` fallbacks instead of animated backs.
+
+The original QuickTime/ProRes files remain in `images/members/backs/*Raw.mov`
+for editing. Rebuild the serving assets with:
+
+```sh
+python3 scripts/encode-member-cards.py
+```
+
+This requires FFmpeg and Pillow. It generates 480 × 480, 12fps, infinitely
+looping WebPs plus still WebP fallbacks. The Pages workflow publishes JPEGs
+and WebPs, excluding the large raw movie masters. Add new source mappings to
+the encoder script when introducing new members.
+
 ## Background assets
 
 ### Editing the cassette

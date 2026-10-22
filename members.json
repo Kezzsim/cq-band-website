@@ -1,0 +1,65 @@
+[
+    {
+        "Name": "Carrie Barry",
+        "Instruments": ["Tenor Guitar", "Vocals", "Mandolin"],
+        "Species": "Beaver",
+        "Pronouns": "She/Her",
+        "Bio": "Lyrical, spiritual miracle. Writes the words and melodies that make CQ what it is.",
+        "Phrases": ["We'll burn that bridge when we get there", "We have FUN here!", "Sounds GAY, I'm in!"],
+        "Place": "Port Jefferson",
+        "Socials": {
+            "Instagram": "https://www.instagram.com/kezzism/",
+            "Bluesky": "https://bsky.app/profile/kezz.io",
+            "Website": "https://kezzism.com/"
+        },
+        "card_front": "./images/members/fronts/Carrie.jpg",
+        "card_back": "./images/members/backs/Carrie.webp",
+        "card_back_still": "./images/members/backs/Carrie-still.webp"
+    },
+        {
+        "Name": "Nikki Pixel",
+        "Instruments": ["Drums"],
+        "Species": "Lioness",
+        "Pronouns": "She/Her",
+        "Bio": "The heartbeat. Truly feral and untamed energy. Always in [for a good] time.",
+        "Phrases": ["Auuu naur!", "ONE, TWO, A 1, 2, 3, 4!", "Find me on OnlyFans!"],
+        "Place": "Islip",
+        "Socials": {
+            "Instagram": "https://www.instagram.com/nikkipixelarts/",
+            "Website": "https://nikkipixel.neocities.org/"
+        },
+        "card_front": "./images/members/fronts/Nikki.jpg",
+        "card_back": "./images/members/backs/Nikki.webp",
+        "card_back_still": "./images/members/backs/Nikki-still.webp"
+    },
+        {
+        "Name": "Spike Akula",
+        "Instruments": ["Bass"],
+        "Species": "Grey Fox",
+        "Pronouns": "They/Them",
+        "Bio": "The foundation, classically trained. Fastidious foxo. Above average orange enjoyer.",
+        "Phrases": ["Noted!", "Once more with FUNK!"],
+        "Place": "Babylon",
+        "Socials": {
+            "Instagram": "https://www.instagram.com/dani_keys_hodgkinson/"
+        },
+        "card_front": "./images/members/fronts/Spike.jpg",
+        "card_back": "./images/members/backs/Spike.webp",
+        "card_back_still": "./images/members/backs/Spike-still.webp"
+    },
+        {
+        "Name": "Luna",
+        "Instruments": ["Guitar"],
+        "Species": "Italian",
+        "Pronouns": "She/Her",
+        "Bio": "Lead singer / songwriter of *Luna Sage and the Girlfiendz*, 100% punk rock. Knows the scene in and out.",
+        "Phrases": ["Nipples!", "I'm wearin' a Hæt!"],
+        "Place": "Amityville",
+        "Socials": {
+            "Instagram": "https://www.instagram.com/lunasagemusic.redux/"
+        },
+        "card_front": "./images/members/fronts/Luna.jpg",
+        "card_back": "./images/members/backs/Luna.webp",
+        "card_back_still": "./images/members/backs/Luna-still.webp"
+    }
+]
