@@ -48,7 +48,7 @@
         "card_back_still": "./images/members/backs/Spike-still.webp"
     },
         {
-        "Name": "Luna",
+        "Name": "Luna Sage",
         "Instruments": ["Guitar"],
         "Species": "Italian",
         "Pronouns": "She/Her",
@@ -56,7 +56,8 @@
         "Phrases": ["Nipples!", "I'm wearin' a Hæt!"],
         "Place": "Amityville",
         "Socials": {
-            "Instagram": "https://www.instagram.com/lunasagemusic.redux/"
+            "Instagram": "https://www.instagram.com/lunasagemusic.redux/",
+            "Spotify": "https://open.spotify.com/artist/30reS4qP6hgfQJ2Cw4z6I9"
         },
         "card_front": "./images/members/fronts/Luna.jpg",
         "card_back": "./images/members/backs/Luna.webp",

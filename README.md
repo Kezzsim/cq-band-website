@@ -80,6 +80,14 @@ left/right arrows. Social links use labeled SVG icon buttons; current data uses
 Instagram, Bluesky, and Website. YouTube, TikTok, Bandcamp, and Spotify icons
 are also available in `members.js`; unknown platforms use a website icon.
 
+Navigation buttons independently roll a random directional road sign on
+initialization and every profile selection, with a short toss and a random
+3–12° landing tilt. Repeats are allowed. Artwork is in `assets/buttons/`;
+`assets/buttons/signs.js` lists the exact case-sensitive filenames for each
+direction (including `right_button_3.svg`). Add new sign files to that list
+and the service worker shell list when extending the collection. Reduced
+motion keeps the random sign and tilt but skips the toss animation.
+
 `members.css` controls the carousel styling and speech-bubble shape. Data and
 media load near the section. Reduced-motion, data-saving, hidden-tab, and
 offscreen states use `card_back_still` fallbacks instead of animated backs.
