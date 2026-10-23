@@ -1,5 +1,7 @@
 'use strict';
 
+import { memberSigns } from './assets/buttons/signs.js';
+
 const icons = {
   instagram: '<svg class="social-outline" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>',
   bluesky: '<svg viewBox="0 0 600 530" aria-hidden="true"><path d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-.0174-2.9357-1.1937.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z"/></svg>',
@@ -14,6 +16,35 @@ export async function setupMembers() {
   const section = document.querySelector('#members');
   const $ = (selector) => section.querySelector(selector);
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const signAnimations = new Map();
+  const signImages = ['left', 'right'].map((direction) => ({
+    direction,
+    image: $(`.member-arrow-${direction} img`),
+  }));
+  function tossSigns() {
+    signImages.forEach(({ direction, image }) => {
+      const options = memberSigns[direction];
+      const file = options[Math.floor(Math.random() * options.length)];
+      const start = getComputedStyle(image).transform;
+      signAnimations.get(image)?.cancel();
+      image.src = `./assets/buttons/${file}`;
+      // Independent rolls: repeated signs are intentional, just like dice.
+      const angle = (3 + Math.random() * 9) * (Math.random() < .5 ? -1 : 1);
+      const landing = `rotate(${angle}deg)`;
+      image.style.transform = landing;
+      if (!motion.matches) {
+        const drift = (Math.random() - .5) * 12;
+        const spin = angle + (Math.random() < .5 ? -18 : 18);
+        signAnimations.set(image, image.animate([
+          { transform: start },
+          { transform: `translate(${drift}px, -16px) rotate(${spin}deg) scale(1.08)`, offset: .4 },
+          { transform: `translateY(2px) rotate(${angle - 3}deg) scale(.97)`, offset: .78 },
+          { transform: landing },
+        ], { duration: 390, easing: 'ease-out' }));
+      }
+    });
+  }
+  tossSigns();
   let members;
   try {
     const response = await fetch('./members.json', { cache: 'no-cache' });
@@ -66,6 +97,7 @@ export async function setupMembers() {
     preview(previewButtons[1], members[wrap(current + 1)]);
   }
   function select(index, animate = true) {
+    if (animate) tossSigns();
     current = wrap(index);
     const member = members[current];
     setCardImage($('#member-front'), [member.card_front, member.card_back_still]);
@@ -149,7 +181,11 @@ export async function setupMembers() {
     if (event.target.closest('a') || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
     event.preventDefault(); select(current + (event.key === 'ArrowLeft' ? -1 : 1));
   });
-  motion.addEventListener('change', () => { animation?.cancel(); refreshPreviews(); });
+  motion.addEventListener('change', () => {
+    animation?.cancel();
+    signAnimations.forEach((animation) => animation.cancel());
+    refreshPreviews();
+  });
   document.addEventListener('visibilitychange', refreshPreviews);
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(([entry]) => {

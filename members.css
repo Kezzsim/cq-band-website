@@ -12,13 +12,10 @@
 .member-preview:hover{transform:rotate(0) scale(1.05)}
 .member-preview-name{position:absolute;bottom:8px;left:5px;right:5px;background:#171816e8;font:18px var(--font-flavor);padding:6px 2px;text-align:center}
 .callout{position:absolute;right:-24%;top:-58px;width:94%;max-width:300px;z-index:3;background:var(--acid);color:var(--ink);font:25px/1.1 var(--font-flavor);text-align:center;padding:16px 18px 30px;transform:rotate(9deg);filter:drop-shadow(4px 4px 0 #000b);clip-path:polygon(2% 8%,92% 0,100% 68%,71% 78%,53% 100%,51% 80%,0 85%)}
-.member-switchboard{display:grid;grid-template-columns:58px minmax(0,1fr) 58px;gap:16px;align-items:center}
-.member-arrow{border:0;min-height:58px;background:var(--acid);color:var(--ink);display:grid;place-items:center;padding:8px;filter:drop-shadow(3px 4px #0008);transition:background .15s,transform .15s}
-.member-arrow-left{clip-path:polygon(19% 0,100% 12%,88% 87%,0 100%,9% 28%);transform:rotate(-5deg)}
-.member-arrow-right{clip-path:polygon(0 12%,81% 0,91% 28%,100% 100%,12% 87%);transform:rotate(5deg)}
-.member-arrow svg{width:36px;height:36px}
-.member-arrow:hover{background:var(--paper);transform:rotate(0) scale(1.06)}
-.member-arrow:active{transform:scale(.95)}
+.member-switchboard{display:grid;grid-template-columns:72px minmax(0,1fr) 72px;gap:16px;align-items:center}
+.member-arrow{border:0;min-height:76px;background:transparent;display:grid;place-items:center;padding:4px;overflow:visible}
+.member-arrow img{display:block;width:64px;height:64px;object-fit:contain;pointer-events:none;filter:drop-shadow(3px 4px 1px #0009);transform-origin:50% 65%}
+.member-arrow:hover img{filter:drop-shadow(3px 4px 1px #0009) brightness(1.15)}
 .member-readout{text-align:center;min-width:0}
 .member-readout h3{font:700 36px/1.15 var(--font-heading);margin:4px 0 8px;overflow-wrap:anywhere}
 .member-readout .eyebrow{font:16px/1.5 var(--font-body);color:var(--acid);letter-spacing:.8px;text-transform:none;margin:0}
@@ -46,3 +43,4 @@
 @media(prefers-reduced-motion:reduce){.member-preview,.member-arrow,.member-socials a{transition:none}}
 @media(min-width:1000px){.member-identity{font-size:18px}}
 @media(max-width:540px){.member-identity{font-size:15px;gap:7px 12px}}
+@media(max-width:540px){.member-switchboard{grid-template-columns:56px minmax(0,1fr) 56px;gap:6px}.member-arrow{min-height:64px;padding:3px}.member-arrow img{width:50px;height:50px}}

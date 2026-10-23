@@ -1,6 +1,6 @@
 'use strict';
 
-const VERSION = 'cq-v15';
+const VERSION = 'cq-v16';
 const SHELL = `${VERSION}-shell`;
 const DATA = `${VERSION}-data`;
 const APP_ROOT = new URL('./', self.location.href);
@@ -11,6 +11,11 @@ const SHELL_FILES = [
   './videobg/landscape.jpg', './videobg/portrait.jpg',
   './cassette.css',
   './members.css', './members.js',
+  './assets/buttons/signs.js',
+  ...['Left_button_1', 'Left_button_2', 'Left_button_3', 'Left_button_4',
+    'Left_button_5', 'Left_button_6', 'Right_button_1', 'Right_button_2',
+    'right_button_3', 'Right_button_4', 'Right_button_5', 'Right_button_6']
+    .map((sign) => `./assets/buttons/${sign}.svg`),
   ...['pronouns', 'species', 'place'].map((field) => `./assets/member-fields/${field}.svg`),
   ...['shell', 'label', 'label-stripes', 'lettering', 'side-badge', 'tape-window',
     'tape', 'reel-left', 'reel-right', 'lower-panel', 'guide-hole', 'screw']
